@@ -226,8 +226,28 @@ class firstFragment : Fragment() {
         //Queue up
         view.btnQueue.setOnClickListener {
             if (enrollSelected || regSelected || gradesSelected|| transcriptSelected){
-                //Go to second page
-                Navigation.findNavController(view).navigate(R.id.action_firstFragment_to_secondFragment)
+                val builder = AlertDialog.Builder(activity)
+                builder.setMessage("Do you want to queue now?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id ->
+                        //Go to second page
+                        var selected: String? = null
+                        for (i in selectedArraylist){
+                            if (selected == null){
+                                selected = Typography.bullet.toString() + i + "\n"
+                            }else{
+                                selected += Typography.bullet.toString() + i + "\n"
+                            }
+                        }
+                        Log.d("TAG", selected.toString())
+                        Navigation.findNavController(view).navigate(R.id.action_firstFragment_to_secondFragment)
+                    }
+                    .setNegativeButton("No") { dialog, id ->
+                        // Dismiss the dialog
+                        dialog.dismiss()
+                    }
+                val alert = builder.create()
+                alert.show()
             }else{
                 Toast.makeText(activity, "Select something to queue up first", Toast.LENGTH_SHORT).show()
             }

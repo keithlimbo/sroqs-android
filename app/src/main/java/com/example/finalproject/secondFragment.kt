@@ -39,17 +39,6 @@ class secondFragment : Fragment() {
 //        return inflater.inflate(R.layout.fragment_second, container, false)
         val view: View = inflater!!.inflate(R.layout.fragment_second, container, false)
 
-        //Set list of selected requirement
-        var selectedTransaction : String? = null
-        for (x in 0 until 2) {
-            if (selectedTransaction == null) {
-                selectedTransaction = bullet.toString() + x + "\n"
-            }else
-            {
-                selectedTransaction += bullet.toString() + x + "\n"
-            }
-        }
-        view.selectTransac.text = selectedTransaction
         return view
     }
 
