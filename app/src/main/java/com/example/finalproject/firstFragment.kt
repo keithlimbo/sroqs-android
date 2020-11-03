@@ -240,7 +240,8 @@ class firstFragment : Fragment() {
                             }
                         }
                         Log.d("TAG", selected.toString())
-                        Navigation.findNavController(view).navigate(R.id.action_firstFragment_to_secondFragment)
+                        val action = firstFragmentDirections.actionFirstFragmentToSecondFragment(selected.toString())
+                        Navigation.findNavController(view).navigate(action)
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog
