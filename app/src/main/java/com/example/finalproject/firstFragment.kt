@@ -234,9 +234,9 @@ class firstFragment : Fragment() {
                         var selected: String? = null
                         for (i in selectedArraylist){
                             if (selected == null){
-                                selected = Typography.bullet.toString() + i + "\n"
+                                selected = Typography.bullet.toString() + " " + i + "\n"
                             }else{
-                                selected += Typography.bullet.toString() + i + "\n"
+                                selected += Typography.bullet.toString() + " " + i + "\n"
                             }
                         }
                         Log.d("TAG", selected.toString())

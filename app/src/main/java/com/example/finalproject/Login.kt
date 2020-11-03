@@ -3,62 +3,33 @@ package com.example.finalproject
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-//import android.util.Log
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-//import com.google.firebase.database.DataSnapshot
-//import com.google.firebase.database.DatabaseError
-//import com.google.firebase.database.DatabaseReference
-//import com.google.firebase.database.ValueEventListener
-//import com.google.firebase.database.ktx.database
-//import com.google.firebase.database.ktx.getValue
-//import com.google.firebase.ktx.Firebase
+//import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 const val EXTRA_MESSAGE = "com.example.finalproject"
 
 class Login : AppCompatActivity() {
-
-//    companion object {
-//        private const val TAG = "KotlinActivity"
-//    }
-
-//    private lateinit var database: DatabaseReference
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-//        val database = Firebase.database
+        // Access a Cloud Firestore instance from your Activity
+//        val db = Firebase.firestore
 
-//        fun basicReadWrite() {
-//            // [START write_message]
-//            // Write a message to the database
-//
-//            val myRef = database.getReference("message")
-//
-//            myRef.setValue("Hello, World!")
-//            // [END write_message]
-//
-//            // [START read_message]
-//            // Read from the database
-//            myRef.addValueEventListener(object : ValueEventListener {
-//                override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                    // This method is called once with the initial value and again
-//                    // whenever data at this location is updated.
-//                    val value = dataSnapshot.getValue<String>()
-//                    Log.d(TAG, "Value is: $value")
+//        db.collection("users")
+//            .get()
+//            .addOnSuccessListener { result ->
+//                for (document in result){
+//                    Log.d("TAG", "${document.id} => ${document.data}")
 //                }
-//
-//                override fun onCancelled(error: DatabaseError) {
-//                    // Failed to read value
-//                    Log.w(TAG, "Failed to read value.", error.toException())
-//                }
-//            })
-//            // [END read_message]
-//        }
-
-
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.w("TAGFailed", "Error getting documents.", exception)
+//            }
 
         //get login data
         val getUsername = findViewById<EditText>(R.id.login_username)
@@ -78,9 +49,4 @@ class Login : AppCompatActivity() {
             }
         }
     }
-
-//    private fun writeNewUser(sr_code: String, pass: String) {
-//        val user = User(sr_code, pass)
-//        database.getReference().child("users").setValue(user)
-//    }
 }
