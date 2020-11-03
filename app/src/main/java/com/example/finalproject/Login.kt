@@ -68,9 +68,14 @@ class Login : AppCompatActivity() {
         btnLogin.setOnClickListener {
             val username = "admin"
             val password = "admin"
-            val intent = Intent(this, MainActivity::class.java).apply { putExtra(EXTRA_MESSAGE, "Logged In!") }
-            startActivity(intent)
-
+            if (getPassword.text.toString() == password && getUsername.text.toString() == username){
+                val intent = Intent(this, MainActivity::class.java).apply { putExtra(EXTRA_MESSAGE, "Logged In!") }
+                finish()
+                startActivity(intent)
+            }
+            else{
+                Toast.makeText(this, "Incorrect Username and Password", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
