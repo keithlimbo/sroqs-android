@@ -8,15 +8,15 @@
     <TextView
             android:text="What would you like to queue for today?"
             android:layout_width="313dp"
-            android:layout_height="66dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" android:id="@+id/textView2"
             android:layout_marginBottom="60dp" app:layout_constraintBottom_toTopOf="@+id/gridLayout2"
             android:textSize="24sp" android:fontFamily="sans-serif-medium" android:textColor="#000000"
-    />
+            app:layout_constraintTop_toBottomOf="@+id/welcomeView"/>
     <TextView
             android:text="Welcome, User!"
-            android:layout_width="199dp"
-            android:layout_height="39dp" android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="39dp" android:id="@+id/welcomeView"
             android:textSize="24sp" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:fontFamily="sans-serif-light"

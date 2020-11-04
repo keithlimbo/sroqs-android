@@ -13,6 +13,8 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.Navigation
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_first.*
 import kotlinx.android.synthetic.main.fragment_first.view.*
 import kotlinx.android.synthetic.main.fragment_second.view.*
@@ -73,11 +75,16 @@ class firstFragment : Fragment() {
         var regSelected: Boolean = false
         var gradesSelected: Boolean = false
         var transcriptSelected: Boolean = false
-        var selectedArraylist = ArrayList<String>()
+        val selectedArraylist = ArrayList<String>()
+        var user = Firebase.auth.currentUser
 
         //Check list
         view.ConstraintLayout.setOnClickListener{
             Log.d("TAG", selectedArraylist.toString())
+        }
+
+        if (user != null) {
+            view.welcomeView.text = "Welcome, " + user.email.toString()
         }
 
         //Enroll
@@ -87,7 +94,6 @@ class firstFragment : Fragment() {
                 builder.setMessage("Are you sure you want to queue for enrollment?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        Toast.makeText(activity, "Queued Up!", Toast.LENGTH_SHORT).show()
                         btnenrollSubjects.setBackgroundColor(Color.RED)
                         enrollSelected = true
                         selectedArraylist.add("Enrollment")
@@ -122,7 +128,6 @@ class firstFragment : Fragment() {
                 builder.setMessage("Are you sure you want to queue for Registration form?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        Toast.makeText(activity, "yes", Toast.LENGTH_SHORT).show()
                         btnRegForm.setBackgroundColor(Color.RED)
                         regSelected = true
                         selectedArraylist.add("Registration Form")
@@ -137,7 +142,6 @@ class firstFragment : Fragment() {
                 builder.setMessage("Don't queue for the Registration Form?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        Toast.makeText(activity, "yes", Toast.LENGTH_SHORT).show()
                         btnRegForm.setBackgroundColor(Color.parseColor("#6200EE"))
                         regSelected = false
                         selectedArraylist.removeAt(selectedArraylist.indexOf("Registration Form"))
@@ -158,7 +162,6 @@ class firstFragment : Fragment() {
                 builder.setMessage("Are you sure you want to queue for Copy of your grades?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        Toast.makeText(activity, "yes", Toast.LENGTH_SHORT).show()
                         btnCopyGrades.setBackgroundColor(Color.RED)
                         gradesSelected = true
                         selectedArraylist.add("Copy of Grades")
@@ -173,7 +176,6 @@ class firstFragment : Fragment() {
                 builder.setMessage("Don't queue for the Copy of grades?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        Toast.makeText(activity, "yes", Toast.LENGTH_SHORT).show()
                         btnCopyGrades.setBackgroundColor(Color.parseColor("#6200EE"))
                         gradesSelected = false
                         selectedArraylist.removeAt(selectedArraylist.indexOf("Copy of Grades"))
@@ -194,7 +196,6 @@ class firstFragment : Fragment() {
                 builder.setMessage("Are you sure you want to queue for Transcript?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        Toast.makeText(activity, "yes", Toast.LENGTH_SHORT).show()
                         btnTranscript.setBackgroundColor(Color.RED)
                         transcriptSelected = true
                         selectedArraylist.add("Transcript")
@@ -209,7 +210,6 @@ class firstFragment : Fragment() {
                 builder.setMessage("Don't queue for transcript?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        Toast.makeText(activity, "yes", Toast.LENGTH_SHORT).show()
                         btnTranscript.setBackgroundColor(Color.parseColor("#6200EE"))
                         transcriptSelected = false
                         selectedArraylist.removeAt(selectedArraylist.indexOf("Transcript"))
