@@ -2,11 +2,17 @@ package com.example.finalproject
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_third.view.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -37,8 +43,24 @@ class thirdFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view: View = inflater!!.inflate(R.layout.fragment_third, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_third, container, false)
+        val database = Firebase.database.reference.child("queue")
+        var userData: String
+        var parent: String
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()){
+                    userData = dataSnapshot.value.toString()
+                    parent = dataSnapshot.key.toString()
+                    Log.d("Tag", userData + " " + parent)
+                }
+            }
 
+            override fun onCancelled(databaseError: DatabaseError) {
+
+            }
+        }
+        database.orderByChild("email").addValueEventListener(postListener)
         view.btnCancel.setOnClickListener {
             val builder = AlertDialog.Builder(activity)
             builder.setMessage("Do you want to cancel?")
