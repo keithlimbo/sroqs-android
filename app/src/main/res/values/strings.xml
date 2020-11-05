@@ -5,10 +5,13 @@
     <string name="login_btntext">Login</string>
     <string-array name="college">
         <item>--</item>
-        <item>CICS</item>
-        <item>CEAFA</item>
-        <item>CIS</item>
-        <item>DU30</item>
-        <item>DILAW</item>
+        <item>College of Engineering, Architecture and Fine Arts</item>
+        <item>College of Arts and Sciences</item>
+        <item>College of Teacher Education</item>
+        <item>College of Informatics and Computing Sciences</item>
+        <item>College of Nursing and Allied Health Sciences</item>
+        <item>College of Industrial Technology</item>
+        <item>College of Accountancy, Business, Economics, and International Hospitality Management</item>
+        <item>College of Law</item>
     </string-array>
 </resources>

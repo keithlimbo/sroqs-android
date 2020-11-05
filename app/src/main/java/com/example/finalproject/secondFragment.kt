@@ -8,9 +8,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_second.view.*
 import kotlin.text.Typography.bullet
 
@@ -46,21 +53,42 @@ class secondFragment : Fragment() {
         val view: View = inflater!!.inflate(R.layout.fragment_second, container, false)
         val selectedText = args.selectedString
         view.selectTransac.text = selectedText
+        val database = Firebase.database.reference.child("queue")
+        val user = Firebase.auth.currentUser
+        var maxId: Long? = null
+
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                maxId = (dataSnapshot.childrenCount)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+
+            }
+        }
+        database.addValueEventListener(postListener)
 
         //Confirm
         view.btnConfirm.setOnClickListener {
-            val builder = AlertDialog.Builder(activity)
-            builder.setMessage("Do you have your requirements now?")
-                .setCancelable(false)
-                .setPositiveButton("Yes") { dialog, id ->
-                    Navigation.findNavController(view).navigate(R.id.action_secondFragment_to_thirdFragment)
-                }
-                .setNegativeButton("No") { dialog, id ->
-                    // Dismiss the dialog
-                    dialog.dismiss()
-                }
-            val alert = builder.create()
-            alert.show()
+            var selectedCollege = view.spinner.selectedItem.toString()
+            if (selectedCollege == "--") {
+                Toast.makeText(activity, "Please choose your college department", Toast.LENGTH_SHORT).show()
+            }else {
+                val builder = AlertDialog.Builder(activity)
+                builder.setMessage("Do you have your requirements now?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id ->
+                        val userQueue = User(user!!.email.toString(), selectedCollege)
+                        database.child((maxId!! + 1).toString()).setValue(userQueue)
+                        Navigation.findNavController(view).navigate(R.id.action_secondFragment_to_thirdFragment)
+                    }
+                    .setNegativeButton("No") { dialog, id ->
+                        // Dismiss the dialog
+                        dialog.dismiss()
+                    }
+                val alert = builder.create()
+                alert.show()
+            }
         }
 
         //Cancel

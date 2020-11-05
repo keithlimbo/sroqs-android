@@ -53,7 +53,6 @@ class thirdFragment : Fragment() {
             val alert = builder.create()
             alert.show()
         }
-
         return view
     }
 
