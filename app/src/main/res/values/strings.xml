@@ -3,4 +3,12 @@
     <string name="password_hint">Password</string>
     <string name="sr_code_hint">Email</string>
     <string name="login_btntext">Login</string>
+    <string-array name="college">
+        <item>--</item>
+        <item>CICS</item>
+        <item>CEAFA</item>
+        <item>CIS</item>
+        <item>DU30</item>
+        <item>DILAW</item>
+    </string-array>
 </resources>

@@ -9,15 +9,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.Navigation
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.alertlayout.view.*
 import kotlinx.android.synthetic.main.fragment_first.*
 import kotlinx.android.synthetic.main.fragment_first.view.*
-import kotlinx.android.synthetic.main.fragment_second.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,6 +44,7 @@ class firstFragment : Fragment() {
                 builder.setMessage("Do you want to log out?")
 
                 builder.setPositiveButton("Yes") { dialog, which ->
+                    FirebaseAuth.getInstance().signOut()
                     val intent = Intent(activity, Login::class.java)
                     activity!!.finish()
                     startActivity(intent)
@@ -76,11 +78,12 @@ class firstFragment : Fragment() {
         var gradesSelected: Boolean = false
         var transcriptSelected: Boolean = false
         val selectedArraylist = ArrayList<String>()
-        var user = Firebase.auth.currentUser
+        val user = Firebase.auth.currentUser
 
         //Check list
         view.ConstraintLayout.setOnClickListener{
             Log.d("TAG", selectedArraylist.toString())
+
         }
 
         if (user != null) {
