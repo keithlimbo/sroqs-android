@@ -84,13 +84,16 @@ class firstFragment : Fragment() {
         val database = Firebase.database.reference.child("queue")
         val user = Firebase.auth.currentUser
         var data : String? = ""
+
         val queueListener = object : ValueEventListener {
+            var isTrue: Boolean? = null
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (childSnapshot in dataSnapshot.children) {
                     val isQueue: String = childSnapshot.value.toString()
                     Log.d("isQueue", isQueue)
                     if(isQueue == "true") {
                         Log.i("Queue", isQueue)
+                        isTrue = true
                         (activity as MainActivity?)?.goToC()
                     }
                 }
@@ -113,7 +116,7 @@ class firstFragment : Fragment() {
         }
         // Get Parent
         database.orderByChild("email").equalTo(user!!.email).addValueEventListener(parentListener)
-
+        Log.d("isTu", "asdasdadasdadad")
         var enrollSelected = false
         var regSelected = false
         var gradesSelected = false

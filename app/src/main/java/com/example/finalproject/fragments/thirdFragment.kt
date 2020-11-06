@@ -1,7 +1,10 @@
 package com.example.finalproject.fragments
 
 import android.app.AlertDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -32,9 +35,9 @@ class thirdFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    var queueNumber: Int? = null
+    var qNumber: Int? = null
     var windowNum: Int? = null
-        override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -49,11 +52,21 @@ class thirdFragment : Fragment() {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_third, container, false)
         windowNum = arguments?.getInt("winNum")
-        queueNumber = arguments?.getInt("queNum")
-        Log.d("Nums", queueNumber.toString() + " " + windowNum.toString())
-        view.queueNumber.text = queueNumber.toString()
-        view.queueNumber2.text = windowNum.toString()
+        qNumber = arguments?.getInt("queNum")
+        val shared = activity?.getSharedPreferences("SHARED PREF", Context.MODE_PRIVATE)
+        if(windowNum != null || qNumber != null) {
+            val editor: SharedPreferences.Editor = shared!!.edit()
+            editor.putString("QUEUE NUMBER", qNumber.toString())
+            editor.putString("WINDOW NUMBER", windowNum.toString())
+            editor.apply()
+        }
 
+        val qNum = shared!!.getString("QUEUE NUMBER", "")
+        val wNum = shared.getString("WINDOW NUMBER", "")
+        view.queueNumber.text = qNum
+        view.queueNumber2.text = wNum
+
+        Log.d("Nums", qNumber.toString() + " " + windowNum.toString())
         //Cancel
         val database = Firebase.database.reference.child("queue")
         val user = Firebase.auth.currentUser
@@ -67,7 +80,7 @@ class thirdFragment : Fragment() {
                         builder.setMessage("Do you want to cancel?")
                             .setCancelable(false)
                             .setPositiveButton("Yes") { dialog, id ->
-                                val userQueue = User(null, null, null, null)
+                                val userQueue = User(null, null, null, 0)
                                 database.child(data).setValue(userQueue)
                                 (activity as MainActivity?)?.goToA()
                             }
@@ -85,7 +98,9 @@ class thirdFragment : Fragment() {
             }
         }
         database.orderByChild("email").equalTo(user!!.email).addValueEventListener(thirdListener)
-        //End Cance;
+        //End Cancel
+
+
 
         return view
     }

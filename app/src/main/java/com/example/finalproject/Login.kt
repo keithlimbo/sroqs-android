@@ -2,6 +2,8 @@ package com.example.finalproject
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -13,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.coroutines.delay
 
 class Login : AppCompatActivity() {
 
@@ -35,10 +38,16 @@ class Login : AppCompatActivity() {
         val getPassword = findViewById<EditText>(R.id.login_password)
         val btnLogin = findViewById<Button>(R.id.login_btn)
 
-
         if(auth.currentUser != null){
-            finish()
-            startActivity(intent)
+            LoginProgressBar.visibility = View.VISIBLE
+            getUsername.visibility = View.GONE
+            getPassword.visibility = View.GONE
+            btnLogin.visibility = View.GONE
+            Handler(Looper.getMainLooper()).postDelayed({
+                /* Create an Intent that will start the Menu-Activity. */
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }, 2000)
         }else {
             btnLogin.setOnClickListener {
                 val email = getUsername.text.toString()
@@ -53,12 +62,21 @@ class Login : AppCompatActivity() {
                                 if (task.isSuccessful) {
                                     // Sign in success, update UI with the signed-in user's information
                                     LoginProgressBar.visibility = View.VISIBLE
+                                    getUsername.visibility = View.GONE
+                                    getPassword.visibility = View.GONE
+                                    btnLogin.visibility = View.GONE
                                     Log.d("TAG", "signInWithEmail:success")
-                                    finish()
-                                    startActivity(intent)
+                                    Handler(Looper.getMainLooper()).postDelayed({
+                                        /* Create an Intent that will start the Menu-Activity. */
+                                        startActivity(Intent(this, MainActivity::class.java))
+                                        finish()
+                                    }, 2000)
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     LoginProgressBar.visibility = View.GONE
+                                    getUsername.visibility = View.VISIBLE
+                                    getPassword.visibility = View.VISIBLE
+                                    btnLogin.visibility = View.VISIBLE
                                     Log.w("TAG", "signInWithEmail:failure", task.exception)
                                     Toast.makeText(this, "Auth Fail", Toast.LENGTH_SHORT).show()
                                 }
