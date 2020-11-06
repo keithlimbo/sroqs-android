@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -45,38 +46,40 @@ class thirdFragment : Fragment() {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_third, container, false)
         val database = Firebase.database.reference.child("queue")
-        var userData: String
-        var parent: String
-        val postListener = object : ValueEventListener {
+        val user = Firebase.auth.currentUser
+        val thirdListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()){
-                    userData = dataSnapshot.value.toString()
-                    parent = dataSnapshot.key.toString()
-                    Log.d("Tag", userData + " " + parent)
+                for (childSnapshot in dataSnapshot.children) {
+                    val data = childSnapshot.key.toString()
+                    Log.i("TAG", data)
+                    view.btnCancel.setOnClickListener {
+                        val builder = AlertDialog.Builder(activity)
+                        builder.setMessage("Do you want to cancel?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes") { dialog, id ->
+                                val userQueue = User(null, null, null)
+                                database.child(data).setValue(userQueue)
+                                Navigation.findNavController(view).navigate(R.id.action_thirdFragment_to_firstFragment)
+                            }
+                            .setNegativeButton("No") { dialog, id ->
+                                // Dismiss the dialog
+                                dialog.dismiss()
+                            }
+                        val alert = builder.create()
+                        alert.show()
+                    }
                 }
             }
-
             override fun onCancelled(databaseError: DatabaseError) {
-
+                Log.d("ERROR", "Database Error")
             }
         }
-        database.orderByChild("email").addValueEventListener(postListener)
-        view.btnCancel.setOnClickListener {
-            val builder = AlertDialog.Builder(activity)
-            builder.setMessage("Do you want to cancel?")
-                    .setCancelable(false)
-                    .setPositiveButton("Yes") { dialog, id ->
-                        Navigation.findNavController(view).navigate(R.id.action_thirdFragment_to_firstFragment)
-                    }
-                    .setNegativeButton("No") { dialog, id ->
-                        // Dismiss the dialog
-                        dialog.dismiss()
-                    }
-            val alert = builder.create()
-            alert.show()
-        }
+        database.orderByChild("email").equalTo(user!!.email).addValueEventListener(thirdListener)
+
+
         return view
     }
+
 
     companion object {
         /**

@@ -55,22 +55,22 @@ class secondFragment : Fragment() {
         view.selectTransac.text = selectedText
         val database = Firebase.database.reference.child("queue")
         val user = Firebase.auth.currentUser
-        var maxId: Long? = null
+        var maxId: Int = 0
 
-        val postListener = object : ValueEventListener {
+        val secondListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                maxId = (dataSnapshot.childrenCount)
+                maxId = (dataSnapshot.childrenCount.toInt())
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
 
             }
         }
-        database.addValueEventListener(postListener)
+        database.addValueEventListener(secondListener)
 
         //Confirm
         view.btnConfirm.setOnClickListener {
-            var selectedCollege = view.spinner.selectedItem.toString()
+            val selectedCollege = view.spinner.selectedItem.toString()
             if (selectedCollege == "--") {
                 Toast.makeText(activity, "Please choose your college department", Toast.LENGTH_SHORT).show()
             }else {
@@ -78,8 +78,8 @@ class secondFragment : Fragment() {
                 builder.setMessage("Do you have your requirements now?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        val userQueue = User(user!!.email.toString(), selectedCollege)
-                        database.child((maxId!! + 1).toString()).setValue(userQueue)
+                        val userQueue = User(user!!.email.toString(), selectedCollege, true)
+                        database.child((maxId + 1).toString()).setValue(userQueue)
                         Navigation.findNavController(view).navigate(R.id.action_secondFragment_to_thirdFragment)
                     }
                     .setNegativeButton("No") { dialog, id ->

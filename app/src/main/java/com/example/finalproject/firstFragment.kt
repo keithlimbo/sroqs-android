@@ -5,22 +5,21 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.alertlayout.view.*
 import kotlinx.android.synthetic.main.fragment_first.*
 import kotlinx.android.synthetic.main.fragment_first.view.*
 
@@ -41,7 +40,7 @@ class firstFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true){
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val builder = AlertDialog.Builder(activity)
                 builder.setTitle("Log Out!")
@@ -78,207 +77,236 @@ class firstFragment : Fragment() {
         val view: View = inflater!!.inflate(R.layout.fragment_first, container, false)
         val database = Firebase.database.reference.child("queue")
         val user = Firebase.auth.currentUser
-        var email: String
-        val postListener = object : ValueEventListener {
+        var data : String? = ""
+        val queue = false
+        val queueListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()){
-                    email = dataSnapshot.child("1").value.toString()
-                    Log.d("Me", email)
-                }else{
-                    Log.d("Me", "No Email found")
+                for (childSnapshot in dataSnapshot.children) {
+                    var isQueue: String = "false"
+                    isQueue = childSnapshot.value.toString()
+                    Log.d("isQueue", isQueue.toString())
+                    if(isQueue == "true") {
+                        Log.i("Queue", isQueue.toString())
+                        val builder = AlertDialog.Builder(activity)
+                        builder.setMessage("You're already in queue!")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok") { dialog, id ->
+                                Navigation.findNavController(view).navigate(R.id.action_firstFragment_to_thirdFragment)
+                            }
+                        val alert = builder.create()
+                        alert.show()
+                    }
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
-
+                Log.d("ERROR", "Database Error")
             }
         }
-        if(user != null) {
-            database.orderByChild("email").equalTo(user.email).addValueEventListener(postListener)
-            var enrollSelected: Boolean = false
-            var regSelected: Boolean = false
-            var gradesSelected: Boolean = false
-            var transcriptSelected: Boolean = false
-            val selectedArraylist = ArrayList<String>()
-
-            //Check list
-            view.ConstraintLayout.setOnClickListener {
-                Log.d("TAG", selectedArraylist.toString())
-
-            }
-
-            if (user != null) {
-                view.welcomeView.text = "Welcome, " + user.email.toString()
-            }
-
-            //Enroll
-            view.btnenrollSubjects.setOnClickListener {
-                val builder = AlertDialog.Builder(activity)
-                if (!enrollSelected) {
-                    builder.setMessage("Are you sure you want to queue for enrollment?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes") { dialog, id ->
-                            btnenrollSubjects.setBackgroundColor(Color.RED)
-                            enrollSelected = true
-                            selectedArraylist.add("Enrollment")
-                        }
-                        .setNegativeButton("No") { dialog, id ->
-                            // Dismiss the dialog
-                            dialog.dismiss()
-                        }
-                    val alert = builder.create()
-                    alert.show()
-                } else {
-                    builder.setMessage("Don't queue for enrollment?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes") { dialog, id ->
-                            btnenrollSubjects.setBackgroundColor(Color.parseColor("#6200EE"))
-                            enrollSelected = false
-                            selectedArraylist.removeAt(selectedArraylist.indexOf("Enrollment"))
-                        }
-                        .setNegativeButton("No") { dialog, id ->
-                            // Dismiss the dialog
-                            dialog.dismiss()
-                        }
-                    val alert = builder.create()
-                    alert.show()
+        val parentListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (childSnapshot in dataSnapshot.children) {
+                    data = childSnapshot.key.toString()
+                    Log.i("TAG", data!!)
+                    database.child(data!!).addValueEventListener(queueListener)
                 }
             }
-
-            //RegForm
-            view.btnRegForm.setOnClickListener {
-                val builder = AlertDialog.Builder(activity)
-                if (!regSelected) {
-                    builder.setMessage("Are you sure you want to queue for Registration form?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes") { dialog, id ->
-                            btnRegForm.setBackgroundColor(Color.RED)
-                            regSelected = true
-                            selectedArraylist.add("Registration Form")
-                        }
-                        .setNegativeButton("No") { dialog, id ->
-                            // Dismiss the dialog
-                            dialog.dismiss()
-                        }
-                    val alert = builder.create()
-                    alert.show()
-                } else {
-                    builder.setMessage("Don't queue for the Registration Form?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes") { dialog, id ->
-                            btnRegForm.setBackgroundColor(Color.parseColor("#6200EE"))
-                            regSelected = false
-                            selectedArraylist.removeAt(selectedArraylist.indexOf("Registration Form"))
-                        }
-                        .setNegativeButton("No") { dialog, id ->
-                            // Dismiss the dialog
-                            dialog.dismiss()
-                        }
-                    val alert = builder.create()
-                    alert.show()
-                }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.d("ERROR", "Database Error")
             }
+        }
+        // Get Parent
+        database.orderByChild("email").equalTo(user!!.email).addValueEventListener(parentListener)
 
-            //Grades
-            view.btnCopyGrades.setOnClickListener {
-                val builder = AlertDialog.Builder(activity)
-                if (!gradesSelected) {
-                    builder.setMessage("Are you sure you want to queue for Copy of your grades?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes") { dialog, id ->
-                            btnCopyGrades.setBackgroundColor(Color.RED)
-                            gradesSelected = true
-                            selectedArraylist.add("Copy of Grades")
-                        }
-                        .setNegativeButton("No") { dialog, id ->
-                            // Dismiss the dialog
-                            dialog.dismiss()
-                        }
-                    val alert = builder.create()
-                    alert.show()
-                } else {
-                    builder.setMessage("Don't queue for the Copy of grades?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes") { dialog, id ->
-                            btnCopyGrades.setBackgroundColor(Color.parseColor("#6200EE"))
-                            gradesSelected = false
-                            selectedArraylist.removeAt(selectedArraylist.indexOf("Copy of Grades"))
-                        }
-                        .setNegativeButton("No") { dialog, id ->
-                            // Dismiss the dialog
-                            dialog.dismiss()
-                        }
-                    val alert = builder.create()
-                    alert.show()
-                }
+        var enrollSelected: Boolean = false
+        var regSelected: Boolean = false
+        var gradesSelected: Boolean = false
+        var transcriptSelected: Boolean = false
+        val selectedArraylist = ArrayList<String>()
+
+        //Check list
+        view.ConstraintLayout.setOnClickListener {
+            Log.d("TAG", selectedArraylist.toString())
+        }
+        view.welcomeView.text = "Welcome, " + user!!.email.toString()
+
+        //Enroll
+        view.btnenrollSubjects.setOnClickListener {
+            val builder = AlertDialog.Builder(activity)
+            if (!enrollSelected) {
+                builder.setMessage("Are you sure you want to queue for enrollment?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id ->
+                        btnenrollSubjects.setBackgroundColor(Color.RED)
+                        enrollSelected = true
+                        selectedArraylist.add("Enrollment")
+                    }
+                    .setNegativeButton("No") { dialog, id ->
+                        // Dismiss the dialog
+                        dialog.dismiss()
+                    }
+                val alert = builder.create()
+                alert.show()
+            } else {
+                builder.setMessage("Don't queue for enrollment?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id ->
+                        btnenrollSubjects.setBackgroundColor(Color.parseColor("#6200EE"))
+                        enrollSelected = false
+                        selectedArraylist.removeAt(selectedArraylist.indexOf("Enrollment"))
+                    }
+                    .setNegativeButton("No") { dialog, id ->
+                        // Dismiss the dialog
+                        dialog.dismiss()
+                    }
+                val alert = builder.create()
+                alert.show()
             }
+        }
 
-            //Transcript
-            view.btnTranscript.setOnClickListener {
-                val builder = AlertDialog.Builder(activity)
-                if (!transcriptSelected) {
-                    builder.setMessage("Are you sure you want to queue for Transcript?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes") { dialog, id ->
-                            btnTranscript.setBackgroundColor(Color.RED)
-                            transcriptSelected = true
-                            selectedArraylist.add("Transcript")
-                        }
-                        .setNegativeButton("No") { dialog, id ->
-                            // Dismiss the dialog
-                            dialog.dismiss()
-                        }
-                    val alert = builder.create()
-                    alert.show()
-                } else {
-                    builder.setMessage("Don't queue for transcript?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes") { dialog, id ->
-                            btnTranscript.setBackgroundColor(Color.parseColor("#6200EE"))
-                            transcriptSelected = false
-                            selectedArraylist.removeAt(selectedArraylist.indexOf("Transcript"))
-                        }
-                        .setNegativeButton("No") { dialog, id ->
-                            // Dismiss the dialog
-                            dialog.dismiss()
-                        }
-                    val alert = builder.create()
-                    alert.show()
-                }
+        //RegForm
+        view.btnRegForm.setOnClickListener {
+            val builder = AlertDialog.Builder(activity)
+            if (!regSelected) {
+                builder.setMessage("Are you sure you want to queue for Registration form?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id ->
+                        btnRegForm.setBackgroundColor(Color.RED)
+                        regSelected = true
+                        selectedArraylist.add("Registration Form")
+                    }
+                    .setNegativeButton("No") { dialog, id ->
+                        // Dismiss the dialog
+                        dialog.dismiss()
+                    }
+                val alert = builder.create()
+                alert.show()
+            } else {
+                builder.setMessage("Don't queue for the Registration Form?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id ->
+                        btnRegForm.setBackgroundColor(Color.parseColor("#6200EE"))
+                        regSelected = false
+                        selectedArraylist.removeAt(selectedArraylist.indexOf("Registration Form"))
+                    }
+                    .setNegativeButton("No") { dialog, id ->
+                        // Dismiss the dialog
+                        dialog.dismiss()
+                    }
+                val alert = builder.create()
+                alert.show()
             }
+        }
 
-            //Queue up
-            view.btnQueue.setOnClickListener {
-                if (enrollSelected || regSelected || gradesSelected || transcriptSelected) {
-                    val builder = AlertDialog.Builder(activity)
-                    builder.setMessage("Do you want to queue now?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes") { dialog, id ->
-                            //Go to second page
-                            var selected: String? = null
-                            for (i in selectedArraylist) {
-                                if (selected == null) {
-                                    selected = Typography.bullet.toString() + " " + i + "\n"
-                                } else {
-                                    selected += Typography.bullet.toString() + " " + i + "\n"
-                                }
+        //Grades
+        view.btnCopyGrades.setOnClickListener {
+            val builder = AlertDialog.Builder(activity)
+            if (!gradesSelected) {
+                builder.setMessage("Are you sure you want to queue for Copy of your grades?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id ->
+                        btnCopyGrades.setBackgroundColor(Color.RED)
+                        gradesSelected = true
+                        selectedArraylist.add("Copy of Grades")
+                    }
+                    .setNegativeButton("No") { dialog, id ->
+                        // Dismiss the dialog
+                        dialog.dismiss()
+                    }
+                val alert = builder.create()
+                alert.show()
+            } else {
+                builder.setMessage("Don't queue for the Copy of grades?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id ->
+                        btnCopyGrades.setBackgroundColor(Color.parseColor("#6200EE"))
+                        gradesSelected = false
+                        selectedArraylist.removeAt(selectedArraylist.indexOf("Copy of Grades"))
+                    }
+                    .setNegativeButton("No") { dialog, id ->
+                        // Dismiss the dialog
+                        dialog.dismiss()
+                    }
+                val alert = builder.create()
+                alert.show()
+            }
+        }
+
+        //Transcript
+        view.btnTranscript.setOnClickListener {
+            val builder = AlertDialog.Builder(activity)
+            if (!transcriptSelected) {
+                builder.setMessage("Are you sure you want to queue for Transcript?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id ->
+                        btnTranscript.setBackgroundColor(Color.RED)
+                        transcriptSelected = true
+                        selectedArraylist.add("Transcript")
+                    }
+                    .setNegativeButton("No") { dialog, id ->
+                        // Dismiss the dialog
+                        dialog.dismiss()
+                    }
+                val alert = builder.create()
+                alert.show()
+            } else {
+                builder.setMessage("Don't queue for transcript?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id ->
+                        btnTranscript.setBackgroundColor(Color.parseColor("#6200EE"))
+                        transcriptSelected = false
+                        selectedArraylist.removeAt(selectedArraylist.indexOf("Transcript"))
+                    }
+                    .setNegativeButton("No") { dialog, id ->
+                        // Dismiss the dialog
+                        dialog.dismiss()
+                    }
+                val alert = builder.create()
+                alert.show()
+            }
+        }
+
+        //Queue up
+        view.btnQueue.setOnClickListener {
+            if (enrollSelected || regSelected || gradesSelected || transcriptSelected) {
+                val builder = AlertDialog.Builder(activity)
+                builder.setMessage("Do you want to queue now?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id ->
+                        //Go to second page
+                        var selected: String? = null
+                        for (i in selectedArraylist) {
+                            if (selected == null) {
+                                selected = Typography.bullet.toString() + " " + i + "\n"
+                            } else {
+                                selected += Typography.bullet.toString() + " " + i + "\n"
                             }
-                            Log.d("TAG", selected.toString())
-                            val action =
-                                firstFragmentDirections.actionFirstFragmentToSecondFragment(selected.toString())
-                            Navigation.findNavController(view).navigate(action)
                         }
-                        .setNegativeButton("No") { dialog, id ->
-                            // Dismiss the dialog
-                            dialog.dismiss()
-                        }
-                    val alert = builder.create()
-                    alert.show()
-                } else {
-                    Toast.makeText(activity, "Select something to queue up first", Toast.LENGTH_SHORT).show()
-                }
+                        Log.d("TAG", selected.toString())
+                        val action =
+                            firstFragmentDirections.actionFirstFragmentToSecondFragment(selected.toString())
+                        Navigation.findNavController(view).navigate(action)
+                    }
+                    .setNegativeButton("No") { dialog, id ->
+                        // Dismiss the dialog
+                        dialog.dismiss()
+                    }
+                val alert = builder.create()
+                alert.show()
+            } else {
+                Toast.makeText(activity, "Select something to queue up first", Toast.LENGTH_SHORT).show()
             }
         }
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("Resume", "Fragment 1 Resume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("Pause", "Fragment 1 Paused")
     }
 
     companion object {
