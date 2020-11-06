@@ -3,11 +3,11 @@ package com.example.finalproject.fragments
 import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.Navigation
+import androidx.fragment.app.Fragment
+import com.example.finalproject.MainActivity
 import com.example.finalproject.R
 import com.example.finalproject.User
 import com.google.firebase.auth.ktx.auth
@@ -32,8 +32,9 @@ class thirdFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
+    var queueNumber: Int? = null
+    var windowNum: Int? = null
+        override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -47,6 +48,13 @@ class thirdFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_third, container, false)
+        windowNum = arguments?.getInt("winNum")
+        queueNumber = arguments?.getInt("queNum")
+        Log.d("Nums", queueNumber.toString() + " " + windowNum.toString())
+        view.queueNumber.text = queueNumber.toString()
+        view.queueNumber2.text = windowNum.toString()
+
+        //Cancel
         val database = Firebase.database.reference.child("queue")
         val user = Firebase.auth.currentUser
         val thirdListener = object : ValueEventListener {
@@ -59,8 +67,9 @@ class thirdFragment : Fragment() {
                         builder.setMessage("Do you want to cancel?")
                             .setCancelable(false)
                             .setPositiveButton("Yes") { dialog, id ->
-                                val userQueue = User(null, null, null)
+                                val userQueue = User(null, null, null, null)
                                 database.child(data).setValue(userQueue)
+                                (activity as MainActivity?)?.goToA()
                             }
                             .setNegativeButton("No") { dialog, id ->
                                 // Dismiss the dialog
@@ -76,7 +85,7 @@ class thirdFragment : Fragment() {
             }
         }
         database.orderByChild("email").equalTo(user!!.email).addValueEventListener(thirdListener)
-
+        //End Cance;
 
         return view
     }

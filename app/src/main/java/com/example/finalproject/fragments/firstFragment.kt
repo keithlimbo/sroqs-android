@@ -13,9 +13,13 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.example.finalproject.Communicator
 import com.example.finalproject.Login
+import com.example.finalproject.MainActivity
 import com.example.finalproject.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_first.*
@@ -80,42 +84,35 @@ class firstFragment : Fragment() {
         val database = Firebase.database.reference.child("queue")
         val user = Firebase.auth.currentUser
         var data : String? = ""
-//        val queueListener = object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                for (childSnapshot in dataSnapshot.children) {
-//                    val isQueue: String = childSnapshot.value.toString()
-//                    Log.d("isQueue", isQueue)
-//                    if(isQueue == "true") {
-//                        Log.i("Queue", isQueue)
-//                        val builder = AlertDialog.Builder(activity)
-//                        builder.setMessage("You're already in queue!")
-//                            .setCancelable(false)
-//                            .setPositiveButton("Ok") { dialog, id ->
-//                                Navigation.findNavController(view).navigate(R.id.action_firstFragment_to_thirdFragment)
-//                            }
-//                        val alert = builder.create()
-//                        alert.show()
-//                    }
-//                }
-//            }
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                Log.d("ERROR", "Database Error")
-//            }
-//        }
-//        val parentListener = object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                for (childSnapshot in dataSnapshot.children) {
-//                    data = childSnapshot.key.toString()
-//                    Log.i("TAG", data!!)
-//                    database.child(data!!).addValueEventListener(queueListener)
-//                }
-//            }
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                Log.d("ERROR", "Database Error")
-//            }
-//        }
-//        // Get Parent
-//        database.orderByChild("email").equalTo(user!!.email).addValueEventListener(parentListener)
+        val queueListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (childSnapshot in dataSnapshot.children) {
+                    val isQueue: String = childSnapshot.value.toString()
+                    Log.d("isQueue", isQueue)
+                    if(isQueue == "true") {
+                        Log.i("Queue", isQueue)
+                        (activity as MainActivity?)?.goToC()
+                    }
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.d("ERROR", "Database Error")
+            }
+        }
+        val parentListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (childSnapshot in dataSnapshot.children) {
+                    data = childSnapshot.key.toString()
+                    Log.i("TAG", data!!)
+                    database.child(data!!).addValueEventListener(queueListener)
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.d("ERROR", "Database Error")
+            }
+        }
+        // Get Parent
+        database.orderByChild("email").equalTo(user!!.email).addValueEventListener(parentListener)
 
         var enrollSelected = false
         var regSelected = false

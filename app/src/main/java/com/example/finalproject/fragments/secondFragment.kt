@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import com.example.finalproject.Communicator
 import com.example.finalproject.R
 import com.example.finalproject.User
 import com.google.firebase.auth.ktx.auth
@@ -36,7 +37,7 @@ class secondFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private lateinit var communicator: Communicator
     var selectedCollegeFromA: ArrayList<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +54,9 @@ class secondFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view: View = inflater!!.inflate(R.layout.fragment_second, container, false)
+
+        communicator = activity as Communicator
+
         val database = Firebase.database.reference.child("queue")
         val user = Firebase.auth.currentUser
         var maxId: Int = 0
@@ -89,7 +93,21 @@ class secondFragment : Fragment() {
                 builder.setMessage("Do you have your requirements now?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        val userQueue = User(user!!.email.toString(), selectedCollege, true)
+                        var num: Int = 0
+                        if(selectedCollege == "College of Engineering, Architecture and Fine Arts" || selectedCollege == "College of Arts and Sciences"){
+                            num = 1
+                        }
+                        if(selectedCollege == "College of Teacher Education" || selectedCollege == "College of Informatics and Computing Sciences"){
+                            num = 2
+                        }
+                        if(selectedCollege == "College of Nursing and Allied Health Sciences" || selectedCollege == "College of Industrial Technology"){
+                            num = 3
+                        }
+                        if(selectedCollege == "College of Accountancy, Business, Economics, and International Hospitality Management" || selectedCollege == "College of Law"){
+                            num = 4
+                        }
+                        communicator.passBtoC(num, maxId + 1)
+                        val userQueue = User(user!!.email.toString(), selectedCollege, true, num)
                         database.child((maxId + 1).toString()).setValue(userQueue)
                     }
                     .setNegativeButton("No") { dialog, id ->
