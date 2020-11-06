@@ -4,7 +4,7 @@
                                                    xmlns:tools="http://schemas.android.com/tools"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
-                                                   tools:context=".firstFragment" android:id="@+id/ConstraintLayout">
+                                                   tools:context=".fragments.firstFragment" android:id="@+id/ConstraintLayout">
     <TextView
             android:text="What would you like to queue for today?"
             android:layout_width="313dp"

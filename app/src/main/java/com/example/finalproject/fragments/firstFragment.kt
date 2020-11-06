@@ -1,4 +1,4 @@
-package com.example.finalproject
+package com.example.finalproject.fragments
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -12,13 +12,15 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import com.example.finalproject.Login
+import com.example.finalproject.R
+import com.example.finalproject.firstFragmentDirections
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_first.*
 import kotlinx.android.synthetic.main.fragment_first.view.*
@@ -37,7 +39,6 @@ class firstFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
@@ -65,7 +66,6 @@ class firstFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
 
         }
-
     }
 
     override fun onCreateView(
@@ -78,49 +78,47 @@ class firstFragment : Fragment() {
         val database = Firebase.database.reference.child("queue")
         val user = Firebase.auth.currentUser
         var data : String? = ""
-        val queue = false
-        val queueListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (childSnapshot in dataSnapshot.children) {
-                    var isQueue: String = "false"
-                    isQueue = childSnapshot.value.toString()
-                    Log.d("isQueue", isQueue.toString())
-                    if(isQueue == "true") {
-                        Log.i("Queue", isQueue.toString())
-                        val builder = AlertDialog.Builder(activity)
-                        builder.setMessage("You're already in queue!")
-                            .setCancelable(false)
-                            .setPositiveButton("Ok") { dialog, id ->
-                                Navigation.findNavController(view).navigate(R.id.action_firstFragment_to_thirdFragment)
-                            }
-                        val alert = builder.create()
-                        alert.show()
-                    }
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.d("ERROR", "Database Error")
-            }
-        }
-        val parentListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (childSnapshot in dataSnapshot.children) {
-                    data = childSnapshot.key.toString()
-                    Log.i("TAG", data!!)
-                    database.child(data!!).addValueEventListener(queueListener)
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.d("ERROR", "Database Error")
-            }
-        }
-        // Get Parent
-        database.orderByChild("email").equalTo(user!!.email).addValueEventListener(parentListener)
+//        val queueListener = object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                for (childSnapshot in dataSnapshot.children) {
+//                    val isQueue: String = childSnapshot.value.toString()
+//                    Log.d("isQueue", isQueue)
+//                    if(isQueue == "true") {
+//                        Log.i("Queue", isQueue)
+//                        val builder = AlertDialog.Builder(activity)
+//                        builder.setMessage("You're already in queue!")
+//                            .setCancelable(false)
+//                            .setPositiveButton("Ok") { dialog, id ->
+//                                Navigation.findNavController(view).navigate(R.id.action_firstFragment_to_thirdFragment)
+//                            }
+//                        val alert = builder.create()
+//                        alert.show()
+//                    }
+//                }
+//            }
+//            override fun onCancelled(databaseError: DatabaseError) {
+//                Log.d("ERROR", "Database Error")
+//            }
+//        }
+//        val parentListener = object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                for (childSnapshot in dataSnapshot.children) {
+//                    data = childSnapshot.key.toString()
+//                    Log.i("TAG", data!!)
+//                    database.child(data!!).addValueEventListener(queueListener)
+//                }
+//            }
+//            override fun onCancelled(databaseError: DatabaseError) {
+//                Log.d("ERROR", "Database Error")
+//            }
+//        }
+//        // Get Parent
+//        database.orderByChild("email").equalTo(user!!.email).addValueEventListener(parentListener)
 
-        var enrollSelected: Boolean = false
-        var regSelected: Boolean = false
-        var gradesSelected: Boolean = false
-        var transcriptSelected: Boolean = false
+        var enrollSelected = false
+        var regSelected = false
+        var gradesSelected = false
+        var transcriptSelected = false
         val selectedArraylist = ArrayList<String>()
 
         //Check list
@@ -162,7 +160,6 @@ class firstFragment : Fragment() {
                 alert.show()
             }
         }
-
         //RegForm
         view.btnRegForm.setOnClickListener {
             val builder = AlertDialog.Builder(activity)
