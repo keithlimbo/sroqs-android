@@ -2,6 +2,7 @@ package com.example.finalproject.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,14 +12,15 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.finalproject.R
 import com.example.finalproject.User
-import com.example.finalproject.secondFragmentArgs
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.fragment_second.*
 import kotlinx.android.synthetic.main.fragment_second.view.*
+import java.lang.NullPointerException
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,7 +36,9 @@ class secondFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    val args: secondFragmentArgs by navArgs()
+
+    var selectedCollegeFromA: ArrayList<String>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -48,21 +52,29 @@ class secondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_second, container, false)
         val view: View = inflater!!.inflate(R.layout.fragment_second, container, false)
-        val selectedText = args.selectedString
-        view.selectTransac.text = selectedText
         val database = Firebase.database.reference.child("queue")
         val user = Firebase.auth.currentUser
         var maxId: Int = 0
+        var selectedToQueue: String? = null
+        selectedCollegeFromA = arguments?.getStringArrayList("selectedCollege")
 
+        for(i in selectedCollegeFromA!!){
+            if (selectedToQueue == null) {
+                selectedToQueue = i + "\n"
+            } else {
+                selectedToQueue += i + "\n"
+            }
+        }
+        //Print selected
+        view.selectTransac.text = selectedToQueue
+
+        //Generate UID
         val secondListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 maxId = (dataSnapshot.childrenCount.toInt())
             }
-
             override fun onCancelled(databaseError: DatabaseError) {
-
             }
         }
         database.addValueEventListener(secondListener)
@@ -79,7 +91,6 @@ class secondFragment : Fragment() {
                     .setPositiveButton("Yes") { dialog, id ->
                         val userQueue = User(user!!.email.toString(), selectedCollege, true)
                         database.child((maxId + 1).toString()).setValue(userQueue)
-                        Navigation.findNavController(view).navigate(R.id.action_secondFragment_to_thirdFragment)
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog
@@ -96,7 +107,6 @@ class secondFragment : Fragment() {
             builder.setMessage("Do you want to go back?")
                 .setCancelable(false)
                 .setPositiveButton("Yes") { dialog, id ->
-                    Navigation.findNavController(view).navigate(R.id.action_secondFragment_to_firstFragment)
                 }
                 .setNegativeButton("No") { dialog, id ->
                     // Dismiss the dialog

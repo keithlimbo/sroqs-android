@@ -11,15 +11,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
+import com.example.finalproject.Communicator
 import com.example.finalproject.Login
 import com.example.finalproject.R
-import com.example.finalproject.firstFragmentDirections
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_first.*
@@ -39,6 +35,9 @@ class firstFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private lateinit var communicator: Communicator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
@@ -75,6 +74,9 @@ class firstFragment : Fragment() {
         // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_first, container, false)
         val view: View = inflater!!.inflate(R.layout.fragment_first, container, false)
+
+        communicator = activity as Communicator
+
         val database = Firebase.database.reference.child("queue")
         val user = Firebase.auth.currentUser
         var data : String? = ""
@@ -136,7 +138,7 @@ class firstFragment : Fragment() {
                     .setPositiveButton("Yes") { dialog, id ->
                         btnenrollSubjects.setBackgroundColor(Color.RED)
                         enrollSelected = true
-                        selectedArraylist.add("Enrollment")
+                        selectedArraylist.add(Typography.bullet.toString() + " Enrollment")
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog
@@ -169,7 +171,7 @@ class firstFragment : Fragment() {
                     .setPositiveButton("Yes") { dialog, id ->
                         btnRegForm.setBackgroundColor(Color.RED)
                         regSelected = true
-                        selectedArraylist.add("Registration Form")
+                        selectedArraylist.add(Typography.bullet.toString() + " Registration Form")
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog
@@ -203,7 +205,7 @@ class firstFragment : Fragment() {
                     .setPositiveButton("Yes") { dialog, id ->
                         btnCopyGrades.setBackgroundColor(Color.RED)
                         gradesSelected = true
-                        selectedArraylist.add("Copy of Grades")
+                        selectedArraylist.add(Typography.bullet.toString() + " Copy of Grades")
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog
@@ -237,7 +239,7 @@ class firstFragment : Fragment() {
                     .setPositiveButton("Yes") { dialog, id ->
                         btnTranscript.setBackgroundColor(Color.RED)
                         transcriptSelected = true
-                        selectedArraylist.add("Transcript")
+                        selectedArraylist.add(Typography.bullet.toString() + " Transcript")
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog
@@ -269,19 +271,7 @@ class firstFragment : Fragment() {
                 builder.setMessage("Do you want to queue now?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        //Go to second page
-                        var selected: String? = null
-                        for (i in selectedArraylist) {
-                            if (selected == null) {
-                                selected = Typography.bullet.toString() + " " + i + "\n"
-                            } else {
-                                selected += Typography.bullet.toString() + " " + i + "\n"
-                            }
-                        }
-                        Log.d("TAG", selected.toString())
-                        val action =
-                            firstFragmentDirections.actionFirstFragmentToSecondFragment(selected.toString())
-                        Navigation.findNavController(view).navigate(action)
+                        communicator.passAtoB(selectedArraylist)
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog

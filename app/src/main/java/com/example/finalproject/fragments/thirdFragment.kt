@@ -61,7 +61,6 @@ class thirdFragment : Fragment() {
                             .setPositiveButton("Yes") { dialog, id ->
                                 val userQueue = User(null, null, null)
                                 database.child(data).setValue(userQueue)
-                                Navigation.findNavController(view).navigate(R.id.action_thirdFragment_to_firstFragment)
                             }
                             .setNegativeButton("No") { dialog, id ->
                                 // Dismiss the dialog
