@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.finalproject.Communicator
+import com.example.finalproject.MainActivity
 import com.example.finalproject.R
 import com.example.finalproject.User
 import com.google.firebase.auth.ktx.auth
@@ -125,6 +126,7 @@ class secondFragment : Fragment() {
             builder.setMessage("Do you want to go back?")
                 .setCancelable(false)
                 .setPositiveButton("Yes") { dialog, id ->
+                    (activity as MainActivity?)?.goToA()
                 }
                 .setNegativeButton("No") { dialog, id ->
                     // Dismiss the dialog

@@ -9,7 +9,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import com.example.finalproject.Communicator
 import com.example.finalproject.MainActivity
 import com.example.finalproject.R
 import com.example.finalproject.User
@@ -35,10 +37,33 @@ class thirdFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var communicator: Communicator
     var qNumber: Int? = null
     var windowNum: Int? = null
+    val database = Firebase.database.reference.child("queue")
+    val user = Firebase.auth.currentUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                communicator = activity as Communicator
+                val thirdListener = object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (childSnapshot in dataSnapshot.children) {
+                            val data = childSnapshot.key.toString()
+                            Log.i("TAG", data)
+                            communicator.backCtoA(data)
+                        }
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        Log.d("ERROR", "Database Error")
+                    }
+                }
+                database.orderByChild("email").equalTo(user!!.email).addListenerForSingleValueEvent(thirdListener)
+                //End Cancel
+
+            }
+        })
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -68,38 +93,40 @@ class thirdFragment : Fragment() {
 
         Log.d("Nums", qNumber.toString() + " " + windowNum.toString())
         //Cancel
-        val database = Firebase.database.reference.child("queue")
-        val user = Firebase.auth.currentUser
-        val thirdListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (childSnapshot in dataSnapshot.children) {
-                    val data = childSnapshot.key.toString()
-                    Log.i("TAG", data)
-                    view.btnCancel.setOnClickListener {
-                        val builder = AlertDialog.Builder(activity)
-                        builder.setMessage("Do you want to cancel?")
-                            .setCancelable(false)
-                            .setPositiveButton("Yes") { dialog, id ->
-                                val userQueue = User(null, null, null, 0)
-                                database.child(data).setValue(userQueue)
-                                (activity as MainActivity?)?.goToA()
-                            }
-                            .setNegativeButton("No") { dialog, id ->
-                                // Dismiss the dialog
-                                dialog.dismiss()
-                            }
-                        val alert = builder.create()
-                        alert.show()
-                    }
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.d("ERROR", "Database Error")
-            }
-        }
-        database.orderByChild("email").equalTo(user!!.email).addValueEventListener(thirdListener)
-        //End Cancel
+        communicator = activity as Communicator
 
+        view.btnCancel.setOnClickListener {
+            val builder = AlertDialog.Builder(activity)
+            builder.setMessage("Do you want to cancel?")
+                .setCancelable(false)
+
+                .setPositiveButton("Yes") { dialog, id ->
+                    val thirdListener = object : ValueEventListener {
+                        var data:String? = ""
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            for (childSnapshot in dataSnapshot.children) {
+                                data = childSnapshot.key.toString()
+                            }
+                            val userQueue = User(null, null, null, 0)
+                            database.child(data.toString()).setValue(userQueue)
+                        }
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            Log.d("ERROR", "Database Error")
+                        }
+
+                    }
+                    database.orderByChild("email").equalTo(user!!.email).addListenerForSingleValueEvent(thirdListener)
+                    (activity as MainActivity?)?.goToA()
+                }
+
+                .setNegativeButton("No") { dialog, id ->
+                    // Dismiss the dialog
+                    dialog.dismiss()
+                }
+            val alert = builder.create()
+            alert.show()
+            //End Cancel
+        }
 
 
         return view

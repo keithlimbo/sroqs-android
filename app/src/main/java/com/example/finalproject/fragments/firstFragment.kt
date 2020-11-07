@@ -81,42 +81,9 @@ class firstFragment : Fragment() {
 
         communicator = activity as Communicator
 
-        val database = Firebase.database.reference.child("queue")
         val user = Firebase.auth.currentUser
-        var data : String? = ""
 
-        val queueListener = object : ValueEventListener {
-            var isTrue: Boolean? = null
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (childSnapshot in dataSnapshot.children) {
-                    val isQueue: String = childSnapshot.value.toString()
-                    Log.d("isQueue", isQueue)
-                    if(isQueue == "true") {
-                        Log.i("Queue", isQueue)
-                        isTrue = true
-                        (activity as MainActivity?)?.goToC()
-                    }
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.d("ERROR", "Database Error")
-            }
-        }
-        val parentListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (childSnapshot in dataSnapshot.children) {
-                    data = childSnapshot.key.toString()
-                    Log.i("TAG", data!!)
-                    database.child(data!!).addValueEventListener(queueListener)
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.d("ERROR", "Database Error")
-            }
-        }
-        // Get Parent
-        database.orderByChild("email").equalTo(user!!.email).addValueEventListener(parentListener)
-        Log.d("isTu", "asdasdadasdadad")
+
         var enrollSelected = false
         var regSelected = false
         var gradesSelected = false
