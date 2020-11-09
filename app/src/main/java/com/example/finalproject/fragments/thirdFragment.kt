@@ -4,11 +4,14 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.example.finalproject.Communicator
@@ -40,6 +43,8 @@ class thirdFragment : Fragment() {
     private lateinit var communicator: Communicator
     var qNumber: Int? = null
     var windowNum: Int? = null
+    var qNum: String? = null
+    var wNum:String? = null
     val database = Firebase.database.reference.child("queue")
     val user = Firebase.auth.currentUser
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +81,7 @@ class thirdFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_third, container, false)
+        val mainHandler = Handler(Looper.getMainLooper())
         windowNum = arguments?.getInt("winNum")
         qNumber = arguments?.getInt("queNum")
         val shared = activity?.getSharedPreferences("SHARED PREF", Context.MODE_PRIVATE)
@@ -86,8 +92,8 @@ class thirdFragment : Fragment() {
             editor.apply()
         }
 
-        val qNum = shared!!.getString("QUEUE NUMBER", "")
-        val wNum = shared.getString("WINDOW NUMBER", "")
+        qNum = shared!!.getString("QUEUE NUMBER", "")
+        wNum = shared.getString("WINDOW NUMBER", "")
         view.queueNumber.text = qNum
         view.queueNumber2.text = wNum
 
@@ -95,42 +101,46 @@ class thirdFragment : Fragment() {
         //Cancel
         communicator = activity as Communicator
 
-        view.btnCancel.setOnClickListener {
-            val builder = AlertDialog.Builder(activity)
-            builder.setMessage("Do you want to cancel?")
-                .setCancelable(false)
-
-                .setPositiveButton("Yes") { dialog, id ->
-                    val thirdListener = object : ValueEventListener {
-                        var data:String? = ""
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            for (childSnapshot in dataSnapshot.children) {
-                                data = childSnapshot.key.toString()
-                            }
-                            val userQueue = User(null, null, null, 0)
-                            database.child(data.toString()).setValue(userQueue)
-                        }
-                        override fun onCancelled(databaseError: DatabaseError) {
-                            Log.d("ERROR", "Database Error")
-                        }
-
+        val checkListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                Log.d("asdadsasd", dataSnapshot.child("windowNumber").value.toString())
+                    val window = dataSnapshot.child("windowNumber").value
+                    Log.d("asd", window.toString())
+                    if(window == null){
+                        Toast.makeText(activity, "Transaction complete", Toast.LENGTH_SHORT).show()
+                        (activity as MainActivity?)!!.goToA()
+                        database.removeEventListener(this)
                     }
-                    database.orderByChild("email").equalTo(user!!.email).addListenerForSingleValueEvent(thirdListener)
-                    (activity as MainActivity?)?.goToA()
-                }
-
-                .setNegativeButton("No") { dialog, id ->
-                    // Dismiss the dialog
-                    dialog.dismiss()
-                }
-            val alert = builder.create()
-            alert.show()
-            //End Cancel
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.d("ERROR", "Database Error")
+            }
         }
+        database.child(qNum.toString()).addValueEventListener(checkListener)
 
+        view.btnCancel.setOnClickListener {
+            communicator = activity as Communicator
+            val thirdListener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    for (childSnapshot in dataSnapshot.children) {
+                        val data = childSnapshot.key.toString()
+                        Log.i("TAG", data)
+                        communicator.backCtoA(data)
+                        database.removeEventListener(checkListener)
+                        mainHandler.removeCallbacksAndMessages(null)
+                    }
+                }
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.d("ERROR", "Database Error")
+                }
+            }
+            database.orderByChild("email").equalTo(user!!.email).addListenerForSingleValueEvent(thirdListener)
+        }
 
         return view
     }
+
+
 
 
     companion object {

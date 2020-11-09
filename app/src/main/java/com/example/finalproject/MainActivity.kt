@@ -121,10 +121,4 @@ class MainActivity : AppCompatActivity(), Communicator {
         transaction.commit()
     }
 
-    fun goToC(){
-        val transaction =  this.supportFragmentManager.beginTransaction()
-        val fragmentC = thirdFragment()
-        transaction.replace(R.id.fragment, fragmentC)
-        transaction.commit()
-    }
 }

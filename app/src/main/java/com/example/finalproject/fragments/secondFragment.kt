@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.finalproject.Communicator
@@ -43,6 +44,22 @@ class secondFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val builder = AlertDialog.Builder(activity)
+                builder.setMessage("Do you want to cancel?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes"){dialog, id ->
+                        (activity as MainActivity).goToA()
+                    }
+                    .setNegativeButton("No"){dialog, id ->
+                        dialog.dismiss()
+                    }
+
+                val alert = builder.create()
+                alert.show()
+            }
+        })
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
