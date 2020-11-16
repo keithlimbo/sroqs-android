@@ -1,29 +1,28 @@
 package com.example.finalproject.fragments
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
 import com.example.finalproject.Communicator
 import com.example.finalproject.MainActivity
 import com.example.finalproject.R
 import com.example.finalproject.User
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_second.*
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.fragment_second.view.*
-import java.lang.NullPointerException
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -71,7 +70,7 @@ class secondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view: View = inflater!!.inflate(R.layout.fragment_second, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_second, container, false)
 
         communicator = activity as Communicator
 
@@ -125,7 +124,8 @@ class secondFragment : Fragment() {
                             num = 4
                         }
                         communicator.passBtoC(num, maxId + 1)
-                        val userQueue = User(user!!.email.toString(), selectedCollege, true, num)
+                        val prefs = activity!!.getSharedPreferences("SHARED PREF", Context.MODE_PRIVATE)
+                        val userQueue = User(prefs.getString("USER TOKEN", "EMPTY"),user!!.email.toString(), selectedCollege, true, num)
                         database.child((maxId + 1).toString()).setValue(userQueue)
                     }
                     .setNegativeButton("No") { dialog, id ->

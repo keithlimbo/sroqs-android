@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">FinalProject</string>
+    <string name="app_name">S.R.O.Q.S</string>
     <string name="password_hint">Password</string>
     <string name="sr_code_hint">Email</string>
     <string name="login_btntext">Login</string>
+    <string name="msg_token_fmt"/>
     <string-array name="college">
         <item>--</item>
         <item>College of Engineering, Architecture and Fine Arts</item>

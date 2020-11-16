@@ -97,7 +97,6 @@ class thirdFragment : Fragment() {
         view.queueNumber.text = qNum
         view.queueNumber2.text = wNum
 
-        Log.d("Nums", qNumber.toString() + " " + windowNum.toString())
         //Cancel
         communicator = activity as Communicator
 
@@ -106,8 +105,8 @@ class thirdFragment : Fragment() {
                 Log.d("asdadsasd", dataSnapshot.child("windowNumber").value.toString())
                     val window = dataSnapshot.child("windowNumber").value
                     Log.d("asd", window.toString())
-                    if(window == null){
-                        Toast.makeText(activity, "Transaction complete", Toast.LENGTH_SHORT).show()
+                    if(window.toString() == "0"){
+                        Toast.makeText(activity!!, "Transaction complete", Toast.LENGTH_SHORT).show()
                         (activity as MainActivity?)!!.goToA()
                         database.removeEventListener(this)
                     }

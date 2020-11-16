@@ -1,19 +1,24 @@
 package com.example.finalproject
 
 import android.app.AlertDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.finalproject.fragments.firstFragment
 import com.example.finalproject.fragments.secondFragment
 import com.example.finalproject.fragments.thirdFragment
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.StringBuilder
 
@@ -21,7 +26,19 @@ class MainActivity : AppCompatActivity(), Communicator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        val prefs = this.getSharedPreferences("SHARED PREF", Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = prefs!!.edit()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("Token-Fail", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+            // Get new FCM registration token
+            val token = task.result
+            editor.putString("USER TOKEN", token.toString())
+            editor.apply()
+            Log.d("Token", token.toString())
+        })
         val database = Firebase.database.reference.child("queue")
         val user = Firebase.auth.currentUser
         val parentListener = object : ValueEventListener {
@@ -101,7 +118,7 @@ class MainActivity : AppCompatActivity(), Communicator {
         builder.setMessage("Do you want to cancel?")
             .setCancelable(false)
             .setPositiveButton("Yes") { dialog, id ->
-                val userQueue = User(null, null, null, 0)
+                val userQueue = User(null ,null, null, null, 0)
                 database.child(data).setValue(userQueue)
                 transaction.replace(R.id.fragment, fragmentA)
                 transaction.commit()
