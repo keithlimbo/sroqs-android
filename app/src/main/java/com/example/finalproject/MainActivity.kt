@@ -82,7 +82,6 @@ class MainActivity : AppCompatActivity(), Communicator {
         }
         // Get Parent
         database.orderByChild("email").equalTo(user!!.email).addListenerForSingleValueEvent(parentListener)
-
     }
 
     override fun passAtoB(selectedList: ArrayList<String>) {

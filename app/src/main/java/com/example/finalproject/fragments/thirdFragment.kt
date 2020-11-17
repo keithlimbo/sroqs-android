@@ -100,7 +100,7 @@ class thirdFragment : Fragment() {
                     if(window == "0"){
                         Log.d("WindowNumber", dataSnapshot.child("windowNumber").value.toString())
                         try {
-                            Toast.makeText(activity, "Transaction complete", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(view.context, "Transaction complete", Toast.LENGTH_SHORT).show()
                             (activity as MainActivity?)!!.goToA()
                             database.removeEventListener(this)
                         }catch (e: NullPointerException){
@@ -123,7 +123,6 @@ class thirdFragment : Fragment() {
                         val data = childSnapshot.key.toString()
                         Log.i("TAG", data)
                         communicator.backCtoA(data)
-
                     }
                 }
                 override fun onCancelled(databaseError: DatabaseError) {
