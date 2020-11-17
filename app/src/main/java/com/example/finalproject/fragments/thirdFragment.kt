@@ -1,12 +1,8 @@
 package com.example.finalproject.fragments
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +13,6 @@ import androidx.fragment.app.Fragment
 import com.example.finalproject.Communicator
 import com.example.finalproject.MainActivity
 import com.example.finalproject.R
-import com.example.finalproject.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -81,7 +76,6 @@ class thirdFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_third, container, false)
-        val mainHandler = Handler(Looper.getMainLooper())
         windowNum = arguments?.getInt("winNum")
         qNumber = arguments?.getInt("queNum")
         val shared = activity?.getSharedPreferences("SHARED PREF", Context.MODE_PRIVATE)
@@ -102,13 +96,16 @@ class thirdFragment : Fragment() {
 
         val checkListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                Log.d("asdadsasd", dataSnapshot.child("windowNumber").value.toString())
-                    val window = dataSnapshot.child("windowNumber").value
-                    Log.d("asd", window.toString())
-                    if(window.toString() == "0"){
-                        Toast.makeText(activity!!, "Transaction complete", Toast.LENGTH_SHORT).show()
-                        (activity as MainActivity?)!!.goToA()
-                        database.removeEventListener(this)
+                    val window = dataSnapshot.child("windowNumber").value.toString()
+                    if(window == "0"){
+                        Log.d("WindowNumber", dataSnapshot.child("windowNumber").value.toString())
+                        try {
+                            Toast.makeText(activity, "Transaction complete", Toast.LENGTH_SHORT).show()
+                            (activity as MainActivity?)!!.goToA()
+                            database.removeEventListener(this)
+                        }catch (e: NullPointerException){
+                            Log.d("ERROR", e.toString())
+                        }
                     }
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -118,6 +115,7 @@ class thirdFragment : Fragment() {
         database.child(qNum.toString()).addValueEventListener(checkListener)
 
         view.btnCancel.setOnClickListener {
+//            database.removeEventListener(checkListener)
             communicator = activity as Communicator
             val thirdListener = object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -125,8 +123,7 @@ class thirdFragment : Fragment() {
                         val data = childSnapshot.key.toString()
                         Log.i("TAG", data)
                         communicator.backCtoA(data)
-                        database.removeEventListener(checkListener)
-                        mainHandler.removeCallbacksAndMessages(null)
+
                     }
                 }
                 override fun onCancelled(databaseError: DatabaseError) {
@@ -138,9 +135,6 @@ class thirdFragment : Fragment() {
 
         return view
     }
-
-
-
 
     companion object {
         /**
