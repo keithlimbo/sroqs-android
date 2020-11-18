@@ -13,19 +13,13 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.example.finalproject.Communicator
 import com.example.finalproject.Login
-import com.example.finalproject.MainActivity
 import com.example.finalproject.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_first.*
 import kotlinx.android.synthetic.main.fragment_first.view.*
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -36,7 +30,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class firstFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
@@ -53,8 +46,9 @@ class firstFragment : Fragment() {
                 builder.setPositiveButton("Yes") { dialog, which ->
                     FirebaseAuth.getInstance().signOut()
                     val intent = Intent(activity, Login::class.java)
-                    activity!!.finish()
+                    Toast.makeText(activity, "Logged Out Successfully", Toast.LENGTH_SHORT).show()
                     startActivity(intent)
+                    activity!!.finish()
                 }
 
                 builder.setNegativeButton("Cancel") { dialog, which ->
@@ -77,12 +71,11 @@ class firstFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_first, container, false)
-        val view: View = inflater!!.inflate(R.layout.fragment_first, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_first, container, false)
 
         communicator = activity as Communicator
 
         val user = Firebase.auth.currentUser
-
 
         var enrollSelected = false
         var regSelected = false
@@ -90,10 +83,6 @@ class firstFragment : Fragment() {
         var transcriptSelected = false
         val selectedArraylist = ArrayList<String>()
 
-        //Check list
-        view.ConstraintLayout.setOnClickListener {
-            Log.d("TAG", selectedArraylist.toString())
-        }
         view.welcomeView.text = "Welcome, " + user!!.email.toString()
 
         //Enroll
@@ -103,7 +92,7 @@ class firstFragment : Fragment() {
                 builder.setMessage("Are you sure you want to queue for enrollment?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        btnenrollSubjects.setBackgroundColor(Color.RED)
+                        btnenrollSubjects.setBackgroundColor(Color.BLUE)
                         enrollSelected = true
                         selectedArraylist.add(Typography.bullet.toString() + " Enrollment")
                     }
@@ -136,7 +125,7 @@ class firstFragment : Fragment() {
                 builder.setMessage("Are you sure you want to queue for Registration form?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        btnRegForm.setBackgroundColor(Color.RED)
+                        btnRegForm.setBackgroundColor(Color.BLUE)
                         regSelected = true
                         selectedArraylist.add(Typography.bullet.toString() + " Registration Form")
                     }
@@ -170,7 +159,7 @@ class firstFragment : Fragment() {
                 builder.setMessage("Are you sure you want to queue for Copy of your grades?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        btnCopyGrades.setBackgroundColor(Color.RED)
+                        btnCopyGrades.setBackgroundColor(Color.BLUE)
                         gradesSelected = true
                         selectedArraylist.add(Typography.bullet.toString() + " Copy of Grades")
                     }
@@ -204,7 +193,7 @@ class firstFragment : Fragment() {
                 builder.setMessage("Are you sure you want to queue for Transcript?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        btnTranscript.setBackgroundColor(Color.RED)
+                        btnTranscript.setBackgroundColor(Color.BLUE)
                         transcriptSelected = true
                         selectedArraylist.add(Typography.bullet.toString() + " Transcript")
                     }
@@ -253,16 +242,6 @@ class firstFragment : Fragment() {
         return view
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.d("Resume", "Fragment 1 Resume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("Pause", "Fragment 1 Paused")
-    }
-
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -272,7 +251,6 @@ class firstFragment : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment firstFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             firstFragment().apply {

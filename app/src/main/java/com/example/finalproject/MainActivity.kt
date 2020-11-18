@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.finalproject.fragments.firstFragment
 import com.example.finalproject.fragments.secondFragment
@@ -26,43 +25,28 @@ class MainActivity : AppCompatActivity(), Communicator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val prefs = this.getSharedPreferences("SHARED PREF", Context.MODE_PRIVATE)
-        val editor: SharedPreferences.Editor = prefs!!.edit()
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("Token-Fail", "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-            // Get new FCM registration token
-            val token = task.result
-            editor.putString("USER TOKEN", token.toString())
-            editor.apply()
-            Log.d("Token", token.toString())
-        })
         val database = Firebase.database.reference.child("queue")
         val user = Firebase.auth.currentUser
         val parentListener = object : ValueEventListener {
             var data : String? = ""
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var sb = StringBuilder()
+                val sb = StringBuilder()
                 if(dataSnapshot.exists()) {
                     for (childSnapshot in dataSnapshot.children) {
                         data = childSnapshot.key
                         Log.i("TAG", data.toString())
-                        var uCollege = childSnapshot.child("college").value
-                        var uEmail = childSnapshot.child("email").value
-                        var uQueue = childSnapshot.child("onQueue").value
-                        var uWindow = childSnapshot.child("windowNumber").value
+                        val uCollege = childSnapshot.child("college").value
+                        val uEmail = childSnapshot.child("email").value
+                        val uQueue = childSnapshot.child("onQueue").value
+                        val uWindow = childSnapshot.child("windowNumber").value
                         val gUser = getUser()
                         gUser.college = uCollege!!
                         gUser.email = uEmail!!
                         gUser.onQueue = uQueue as Boolean
                         gUser.windowNumber = uWindow!!
                         sb.append("${gUser.onQueue} $uCollege $uEmail $uQueue $uWindow")
-                        Log.d("String", sb.toString())
                         Log.d("onQueue", gUser.onQueue.toString())
                         if (gUser.onQueue) {
-                            Log.d("onQueue", "tur")
                             val fragmentC = thirdFragment()
                             progressBar.visibility = View.GONE
                             supportFragmentManager.beginTransaction().replace(R.id.fragment, fragmentC).commit()
@@ -70,7 +54,6 @@ class MainActivity : AppCompatActivity(), Communicator {
                     }
                 }
                 else{
-                    Log.d("onQueue", "fas")
                     val fragmentA = firstFragment()
                     progressBar.visibility = View.GONE
                     supportFragmentManager.beginTransaction().replace(R.id.fragment, fragmentA).commit()

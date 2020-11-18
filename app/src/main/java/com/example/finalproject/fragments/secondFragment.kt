@@ -13,18 +13,14 @@ import com.example.finalproject.Communicator
 import com.example.finalproject.MainActivity
 import com.example.finalproject.R
 import com.example.finalproject.User
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.fragment_second.view.*
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -35,7 +31,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class secondFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var communicator: Communicator
@@ -76,7 +71,7 @@ class secondFragment : Fragment() {
 
         val database = Firebase.database.reference.child("queue")
         val user = Firebase.auth.currentUser
-        var maxId: Int = 0
+        var maxId = 0
         var selectedToQueue: String? = null
         selectedCollegeFromA = arguments?.getStringArrayList("selectedCollege")
 
@@ -110,7 +105,7 @@ class secondFragment : Fragment() {
                 builder.setMessage("Do you have your requirements now?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        var num: Int = 0
+                        var num = 0
                         if(selectedCollege == "College of Engineering, Architecture and Fine Arts" || selectedCollege == "College of Arts and Sciences"){
                             num = 1
                         }
@@ -164,7 +159,6 @@ class secondFragment : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment secondFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             secondFragment().apply {

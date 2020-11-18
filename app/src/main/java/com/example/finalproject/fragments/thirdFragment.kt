@@ -21,7 +21,6 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_third.view.*
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -32,7 +31,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class thirdFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var communicator: Communicator
@@ -51,7 +49,6 @@ class thirdFragment : Fragment() {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         for (childSnapshot in dataSnapshot.children) {
                             val data = childSnapshot.key.toString()
-                            Log.i("TAG", data)
                             communicator.backCtoA(data)
                         }
                     }
@@ -98,7 +95,6 @@ class thirdFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val window = dataSnapshot.child("windowNumber").value.toString()
                     if(window == "0"){
-                        Log.d("WindowNumber", dataSnapshot.child("windowNumber").value.toString())
                         try {
                             Toast.makeText(view.context, "Transaction complete", Toast.LENGTH_SHORT).show()
                             (activity as MainActivity?)!!.goToA()
@@ -144,7 +140,6 @@ class thirdFragment : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment thirdFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             thirdFragment().apply {

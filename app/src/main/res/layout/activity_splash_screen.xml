@@ -6,10 +6,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".SplashScreen">
-    <ImageView
-            android:layout_width="157dp"
-            android:layout_height="149dp" app:srcCompat="@mipmap/logo_valorant_round"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/imageView" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+    <TextView
+            android:text="S.R.O.Q.S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" android:id="@+id/textView4"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="36sp" android:textColor="#DC2A2A" android:textStyle="bold"
+            android:fontFamily="serif-monospace"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
