@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity(), Communicator {
                             val fragmentC = thirdFragment()
                             progressBar.visibility = View.GONE
                             supportFragmentManager.beginTransaction().replace(R.id.fragment, fragmentC).commit()
-                            progressBar.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -58,7 +57,6 @@ class MainActivity : AppCompatActivity(), Communicator {
                     val fragmentA = firstFragment()
                     progressBar.visibility = View.GONE
                     supportFragmentManager.beginTransaction().replace(R.id.fragment, fragmentA).commit()
-                    progressBar.visibility = View.VISIBLE
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -67,6 +65,12 @@ class MainActivity : AppCompatActivity(), Communicator {
         }
         // Get Parent
         database.orderByChild("email").equalTo(user!!.email).addListenerForSingleValueEvent(parentListener)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("MainActivity", "DESTROY")
+        progressBar.visibility = View.VISIBLE
     }
 
     override fun passAtoB(selectedList: ArrayList<String>) {
