@@ -5,9 +5,6 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 
-
-
-
 class FirebaseMessageService : FirebaseMessagingService(){
 
     override fun onNewToken(p0: String) {
