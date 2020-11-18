@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity(), Communicator {
                             val fragmentC = thirdFragment()
                             progressBar.visibility = View.GONE
                             supportFragmentManager.beginTransaction().replace(R.id.fragment, fragmentC).commit()
+                            progressBar.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -57,6 +58,7 @@ class MainActivity : AppCompatActivity(), Communicator {
                     val fragmentA = firstFragment()
                     progressBar.visibility = View.GONE
                     supportFragmentManager.beginTransaction().replace(R.id.fragment, fragmentA).commit()
+                    progressBar.visibility = View.VISIBLE
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
