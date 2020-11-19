@@ -43,7 +43,7 @@ class firstFragment : Fragment() {
         super.onCreate(savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val builder = AlertDialog.Builder(activity)
+                val builder = MaterialAlertDialogBuilder(activity!!)
                 builder.setTitle("Log Out!")
                 builder.setMessage("Do you want to log out?")
 
