@@ -1,12 +1,9 @@
 package com.example.finalproject.fragments
 
-import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +14,6 @@ import com.example.finalproject.Communicator
 import com.example.finalproject.Login
 import com.example.finalproject.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.dialog.MaterialDialogs
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -43,8 +39,7 @@ class firstFragment : Fragment() {
         super.onCreate(savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val builder = MaterialAlertDialogBuilder(activity!!)
-                builder.setTitle("Log Out!")
+                val builder = MaterialAlertDialogBuilder(activity!!,R.style.AlertDialogCustom)
                 builder.setMessage("Do you want to log out?")
 
                 builder.setPositiveButton("Yes") { dialog, which ->
@@ -76,7 +71,7 @@ class firstFragment : Fragment() {
         // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_first, container, false)
         val view: View = inflater.inflate(R.layout.fragment_first, container, false)
-        val builder = MaterialAlertDialogBuilder(activity!!)
+        val builder = MaterialAlertDialogBuilder(activity!!, R.style.AlertDialogCustom)
         communicator = activity as Communicator
 
         val user = Firebase.auth.currentUser

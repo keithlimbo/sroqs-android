@@ -1,6 +1,5 @@
 package com.example.finalproject.fragments
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,6 +12,7 @@ import com.example.finalproject.Communicator
 import com.example.finalproject.MainActivity
 import com.example.finalproject.R
 import com.example.finalproject.User
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -40,7 +40,7 @@ class secondFragment : Fragment() {
         super.onCreate(savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val builder = AlertDialog.Builder(activity)
+                val builder = MaterialAlertDialogBuilder(activity!!,R.style.AlertDialogCustom)
                 builder.setMessage("Do you want to cancel?")
                     .setCancelable(false)
                     .setPositiveButton("Yes"){dialog, id ->
@@ -66,7 +66,7 @@ class secondFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_second, container, false)
-
+        val builder = MaterialAlertDialogBuilder(activity!!,R.style.AlertDialogCustom)
         communicator = activity as Communicator
 
         val database = Firebase.database.reference.child("queue")
@@ -101,7 +101,7 @@ class secondFragment : Fragment() {
             if (selectedCollege == "--") {
                 Toast.makeText(activity, "Please choose your college department", Toast.LENGTH_SHORT).show()
             }else {
-                val builder = AlertDialog.Builder(activity)
+
                 builder.setMessage("Do you have your requirements now?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
@@ -127,14 +127,12 @@ class secondFragment : Fragment() {
                         // Dismiss the dialog
                         dialog.dismiss()
                     }
-                val alert = builder.create()
-                alert.show()
+                .show()
             }
         }
 
         //Cancel
         view.btnCancel.setOnClickListener {
-            val builder = AlertDialog.Builder(activity)
             builder.setMessage("Do you want to go back?")
                 .setCancelable(false)
                 .setPositiveButton("Yes") { dialog, id ->
