@@ -16,7 +16,7 @@
                 android:text="S.R.O.Q.S"
                 android:gravity="center"
                 android:textSize="45sp"
-                android:layout_marginBottom="100dp"
+                android:layout_marginBottom="93dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/title" android:fontFamily="@font/nunitosemibold"/>
         <TextView
@@ -52,14 +52,14 @@
                 android:drawableEnd="@drawable/ic_password"
                 android:drawableRight="@drawable/ic_password"/>
         <Button
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="27dp"
                 android:text="@string/login_btntext"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
+                android:layout_marginLeft="58dp"
+                android:layout_marginRight="58dp"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/login_btn"
-                android:layout_gravity="center" android:background="#E22B2B"
-                android:fontFamily="@font/nunitoreg"/>
+                android:layout_gravity="center"
+                android:fontFamily="@font/nunitoreg" app:backgroundTint="@color/colorAccent"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
