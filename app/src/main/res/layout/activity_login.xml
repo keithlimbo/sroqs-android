@@ -5,35 +5,53 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Login">
+        tools:context=".Login" android:background="#F2EBE7">
 
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/login_username"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.515"
-            app:layout_constraintBottom_toTopOf="@+id/login_password"
-            android:autofillHints="" android:hint="@string/sr_code_hint" android:layout_marginBottom="5dp"
-    />
-    <Button
-            android:text="@string/login_btntext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/login_btn"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.498" app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="340dp"/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/login_password"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-            android:hint="@string/password_hint" android:autofillHints="" android:layout_marginBottom="28dp"
-            app:layout_constraintBottom_toTopOf="@+id/login_btn" app:layout_constraintHorizontal_bias="0.515"
-    />
+    <LinearLayout android:layout_width="300dp" android:layout_height="250dp" android:id="@+id/Linear"
+                  android:orientation="vertical"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+                android:text="@string/sr_code_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/textView6" android:textSize="18sp"
+                android:fontFamily="@font/poppinsbold"/>
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/login_username"
+                android:autofillHints=""
+                android:drawableRight="@drawable/ic_user" android:drawableEnd="@drawable/ic_user"/>
+        <TextView
+                android:text="@string/password_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/textView8" android:textSize="18sp"
+                android:fontFamily="@font/poppinsbold"/>
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/login_password"
+                android:autofillHints=""
+                android:drawableEnd="@drawable/ic_password"
+                android:drawableRight="@drawable/ic_password"/>
+        <Button
+                android:layout_marginTop="20dp"
+                android:text="@string/login_btntext"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/login_btn"
+                android:layout_gravity="center" android:background="#E22B2B"
+                android:fontFamily="@font/nunito"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
