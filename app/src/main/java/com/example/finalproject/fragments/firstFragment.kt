@@ -2,6 +2,7 @@ package com.example.finalproject.fragments
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -92,7 +93,7 @@ class firstFragment : Fragment() {
                 builder.setMessage("Are you sure you want to queue for enrollment?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
-                        btnenrollSubjects.setBackgroundColor(Color.BLUE)
+
                         enrollSelected = true
                         selectedArraylist.add(Typography.bullet.toString() + " Enrollment")
                     }
