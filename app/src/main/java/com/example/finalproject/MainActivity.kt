@@ -11,6 +11,7 @@ import com.example.finalproject.fragments.firstFragment
 import com.example.finalproject.fragments.secondFragment
 import com.example.finalproject.fragments.thirdFragment
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -102,7 +103,7 @@ class MainActivity : AppCompatActivity(), Communicator {
         val database = Firebase.database.reference.child("queue")
         val transaction =  this.supportFragmentManager.beginTransaction()
         val fragmentA = firstFragment()
-        val builder = AlertDialog.Builder(this)
+        val builder = MaterialAlertDialogBuilder(this,R.style.AlertDialogCustom)
         builder.setMessage("Do you want to cancel?")
             .setCancelable(false)
             .setPositiveButton("Yes") { dialog, id ->

@@ -81,8 +81,10 @@ class firstFragment : Fragment() {
         var gradesSelected = false
         var transcriptSelected = false
         val selectedArraylist = ArrayList<String>()
-
-        view.welcomeView.text = "Welcome, " + user!!.email.toString()
+        var userEmail = user!!.email.toString()
+        userEmail = userEmail.replace("@gmail.com","")
+        userEmail = userEmail.replace("@yahoo.com","")
+        view.welcomeView.text = "Welcome, $userEmail"
 
         //Enroll
         view.btnenrollSubjects.setOnClickListener {
@@ -219,8 +221,7 @@ class firstFragment : Fragment() {
                         // Dismiss the dialog
                         dialog.dismiss()
                     }
-                val alert = builder.create()
-                alert.show()
+                .show()
             } else {
                 Toast.makeText(activity, "Select something to queue up first", Toast.LENGTH_SHORT).show()
             }

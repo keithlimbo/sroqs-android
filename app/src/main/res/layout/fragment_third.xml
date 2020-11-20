@@ -5,62 +5,67 @@
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
                                                    tools:context=".fragments.thirdFragment"
-                                                   android:id="@+id/frameLayout">
+                                                   android:id="@+id/frameLayout" android:background="@color/background">
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:id="@+id/linearLayout" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" android:gravity="center_horizontal"
-            app:layout_constraintHorizontal_bias="0.0" app:layout_constraintVertical_bias="0.0"
-            android:layout_marginBottom="190dp" android:layout_marginTop="100dp" android:paddingTop="50dp">
+            android:layout_width="350dp"
+            android:layout_height="550dp"
+            android:id="@+id/linearLayout"
+            android:gravity="center_horizontal"
+            android:paddingTop="50dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
         <TextView
                 android:text="Your queue number is:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/textView5"
-                android:textSize="30sp"
-                android:textStyle="bold" android:textColor="#000000"
-        />
-        <Space
                 android:layout_width="match_parent"
-                android:layout_height="20dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="45dp"
+                android:gravity="center"
+                android:id="@+id/textView5"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textAllCaps="true"/>
         <TextView
                 android:text="number"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:id="@+id/queueNumber"
-                android:textSize="24sp" android:textColor="#000000"
-        />
-        <Space
                 android:layout_width="match_parent"
-                android:layout_height="50dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="55dp"
+                android:gravity="center"
+                android:id="@+id/queueNumber"
+                android:textSize="24sp"
+                android:textAllCaps="true" android:fontFamily="@font/nunitoreg" android:textColor="#2E2A2A"/>
         <TextView
                 android:text="Please go to window number:"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView7"
-                android:textSize="30sp" android:textColor="#000000"
-                android:textStyle="bold"
-                android:textAllCaps="false"
-        />
-        <Space
                 android:layout_width="match_parent"
-                android:layout_height="20dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="45dp"
+                android:gravity="center"
+                android:id="@+id/textView7"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+        />
         <TextView
                 android:text="number"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="55dp"
+                android:gravity="center"
                 android:id="@+id/queueNumber2"
-                android:textSize="24sp" android:textColor="#000000"
-        />
+                android:textSize="24sp"
+                android:textAllCaps="true" android:fontFamily="@font/nunitoreg" android:textColor="#2E2A2A"/>
+        <Button
+                android:text="@android:string/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/btnCancel"
+                app:backgroundTint="@color/colorAccent" android:textSize="14sp"/>
     </LinearLayout>
-    <Button
-            android:text="@android:string/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/btnCancel"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintVertical_bias="0.866"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

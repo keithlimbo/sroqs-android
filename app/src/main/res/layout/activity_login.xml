@@ -18,7 +18,8 @@
                 android:textSize="45sp"
                 android:layout_marginBottom="93dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/title" android:fontFamily="@font/nunitosemibold"/>
+                android:layout_height="wrap_content" android:id="@+id/title" android:fontFamily="@font/nunitosemibold"
+                android:textColor="#2E2A2A"/>
         <TextView
                 android:text="@string/sr_code_hint"
                 android:layout_width="match_parent"
@@ -60,6 +61,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/login_btn"
                 android:layout_gravity="center"
-                android:fontFamily="@font/nunitoreg" app:backgroundTint="@color/colorAccent"/>
+                android:fontFamily="@font/nunitoreg" app:backgroundTint="@color/colorAccent" android:textSize="14sp"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
