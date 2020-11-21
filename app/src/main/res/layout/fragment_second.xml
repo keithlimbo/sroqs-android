@@ -45,7 +45,7 @@
             <Spinner
                     android:layout_marginRight="45dp"
                     android:layout_marginLeft="45dp"
-                    android:layout_marginBottom="80dp"
+                    android:layout_marginBottom="63dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/spinner"
@@ -54,14 +54,18 @@
             <TextView
                     android:text="Gather all the requirements before hitting the confirm button"
                     android:layout_width="match_parent"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginLeft="35dp"
                     android:layout_marginBottom="80dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView3"
                     android:textSize="22sp" android:textColor="#2E2A2A"
-                    android:gravity="center" android:fontFamily="@font/nunitosemibold" android:textAllCaps="true"/>
+                    android:fontFamily="@font/nunitosemibold" android:textAllCaps="true"
+                    android:gravity="center"/>
             <androidx.gridlayout.widget.GridLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="40dp"
                     app:columnCount="2"
                     app:rowCount="1"
                     tools:ignore="MissingConstraints"
