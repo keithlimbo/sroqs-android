@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.finalproject.fragments.firstFragment
 import com.example.finalproject.fragments.secondFragment
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity(), Communicator {
                         if (gUser.onQueue) {
                             val fragmentC = thirdFragment()
                             progressBar.visibility = View.GONE
+                            Toast.makeText(this@MainActivity, "You're already in queue!", Toast.LENGTH_SHORT).show()
                             supportFragmentManager.beginTransaction().replace(R.id.fragment, fragmentC).commit()
                         }
                     }
@@ -65,7 +67,8 @@ class MainActivity : AppCompatActivity(), Communicator {
             }
         }
         // Get Parent
-        database.orderByChild("email").equalTo(user!!.email).addListenerForSingleValueEvent(parentListener)
+        database.orderByChild("email").equalTo(user!!.email).addValueEventListener(parentListener)
+        Log.d("ERROR", user.email.toString())
     }
 
     override fun onDestroy() {
@@ -86,18 +89,13 @@ class MainActivity : AppCompatActivity(), Communicator {
         transaction.commit()
     }
 
-    override fun passBtoC(windowNumber: Int, queueNum: Int) {
-        val bundle = Bundle()
-        bundle.putInt("winNum", windowNumber)
-        bundle.putInt("queNum", queueNum)
-
-        val transaction =  this.supportFragmentManager.beginTransaction()
-        val fragmentC = thirdFragment()
-        fragmentC.arguments = bundle
-
-        transaction.replace(R.id.fragment, fragmentC)
-        transaction.commit()
-    }
+//    override fun passBtoC() {
+//        val transaction =  this.supportFragmentManager.beginTransaction()
+//        val fragmentC = thirdFragment()
+//
+//        transaction.replace(R.id.fragment, fragmentC)
+//        transaction.commit()
+//    }
 
     override fun backCtoA(data: String) {
         val database = Firebase.database.reference.child("queue")

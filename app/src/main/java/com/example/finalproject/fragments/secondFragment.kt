@@ -102,7 +102,6 @@ class secondFragment : Fragment() {
             if (selectedCollege == "--") {
                 Toast.makeText(activity, "Please choose your college department", Toast.LENGTH_SHORT).show()
             }else {
-
                 builder.setMessage("Do you have your requirements now?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
@@ -119,7 +118,7 @@ class secondFragment : Fragment() {
                         if(selectedCollege == "College of Accountancy, Business, Economics, and International Hospitality Management" || selectedCollege == "College of Law"){
                             num = 4
                         }
-                        communicator.passBtoC(num, maxId + 1)
+//                        communicator.passBtoC()
                         val prefs = activity!!.getSharedPreferences("SHARED PREF", Context.MODE_PRIVATE)
                         val userQueue = User(prefs.getString("USER TOKEN", "EMPTY"),user!!.email.toString(), selectedCollege, true, num)
                         database.child((maxId + 1).toString()).setValue(userQueue)

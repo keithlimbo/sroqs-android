@@ -12,11 +12,15 @@
                   app:layout_constraintTop_toTopOf="parent"
                   app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
                   app:layout_constraintEnd_toEndOf="parent">
+        <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp" app:srcCompat="@drawable/flat" android:id="@+id/imageView2"
+                android:layout_gravity="center"/>
         <TextView
                 android:text="S.R.O.Q.S"
                 android:gravity="center"
-                android:textSize="45sp"
-                android:layout_marginBottom="93dp"
+                android:textSize="28sp"
+                android:layout_marginBottom="63dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/title" android:fontFamily="@font/nunitosemibold"
                 android:textColor="#2E2A2A"/>

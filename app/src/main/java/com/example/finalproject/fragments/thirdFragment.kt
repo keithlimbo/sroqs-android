@@ -1,7 +1,5 @@
 package com.example.finalproject.fragments
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,7 +9,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.example.finalproject.Communicator
-import com.example.finalproject.MainActivity
 import com.example.finalproject.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -34,8 +31,6 @@ class thirdFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var communicator: Communicator
-    var qNumber: Int? = null
-    var windowNum: Int? = null
     var qNum: String? = null
     var wNum:String? = null
     val database = Firebase.database.reference.child("queue")
@@ -73,45 +68,27 @@ class thirdFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_third, container, false)
-        windowNum = arguments?.getInt("winNum")
-        qNumber = arguments?.getInt("queNum")
-        val shared = activity?.getSharedPreferences("SHARED PREF", Context.MODE_PRIVATE)
-        if(windowNum != null || qNumber != null) {
-            val editor: SharedPreferences.Editor = shared!!.edit()
-            editor.putString("QUEUE NUMBER", qNumber.toString())
-            editor.putString("WINDOW NUMBER", windowNum.toString())
-            editor.apply()
-        }
+        val checkNumber = object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (childSnapshot in snapshot.children) {
+                    qNum = childSnapshot.key.toString()
+                    wNum = childSnapshot.child("windowNumber").value.toString()
+                    view.queueNumber.text = qNum
+                    view.queueNumber2.text = wNum
+                    Log.i("TAG", "$qNum $wNum")
+                }
+            }
 
-        qNum = shared!!.getString("QUEUE NUMBER", "")
-        wNum = shared.getString("WINDOW NUMBER", "")
-        view.queueNumber.text = qNum
-        view.queueNumber2.text = wNum
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("ERROR", "Database Error")
+            }
+        }
+        database.orderByChild("email").equalTo(user!!.email).addListenerForSingleValueEvent(checkNumber)
 
         //Cancel
         communicator = activity as Communicator
 
-        val checkListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val window = dataSnapshot.child("windowNumber").value.toString()
-                    if(window == "0"){
-                        try {
-                            Toast.makeText(view.context, "Transaction complete", Toast.LENGTH_SHORT).show()
-                            (activity as MainActivity?)!!.goToA()
-                            database.removeEventListener(this)
-                        }catch (e: NullPointerException){
-                            Log.d("ERROR", e.toString())
-                        }
-                    }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.d("ERROR", "Database Error")
-            }
-        }
-        database.child(qNum.toString()).addValueEventListener(checkListener)
-
         view.btnCancel.setOnClickListener {
-//            database.removeEventListener(checkListener)
             communicator = activity as Communicator
             val thirdListener = object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -125,10 +102,15 @@ class thirdFragment : Fragment() {
                     Log.d("ERROR", "Database Error")
                 }
             }
-            database.orderByChild("email").equalTo(user!!.email).addListenerForSingleValueEvent(thirdListener)
+            database.orderByChild("email").equalTo(user.email).addListenerForSingleValueEvent(thirdListener)
         }
 
         return view
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Toast.makeText(activity, "Transaction Complete", Toast.LENGTH_SHORT).show()
     }
 
     companion object {
