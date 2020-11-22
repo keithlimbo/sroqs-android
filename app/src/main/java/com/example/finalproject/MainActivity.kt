@@ -21,6 +21,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.IllegalStateException
 import java.lang.StringBuilder
 
 class MainActivity : AppCompatActivity(), Communicator {
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity(), Communicator {
             var data : String? = ""
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val sb = StringBuilder()
+                Log.d("data", dataSnapshot.toString())
                 if(dataSnapshot.exists()) {
                     for (childSnapshot in dataSnapshot.children) {
                         data = childSnapshot.key
@@ -52,14 +54,23 @@ class MainActivity : AppCompatActivity(), Communicator {
                             val fragmentC = thirdFragment()
                             progressBar.visibility = View.GONE
                             Toast.makeText(this@MainActivity, "You're already in queue!", Toast.LENGTH_SHORT).show()
-                            supportFragmentManager.beginTransaction().replace(R.id.fragment, fragmentC).commit()
+                            try {
+                                supportFragmentManager.beginTransaction().replace(R.id.fragment, fragmentC).commit()
+                            }catch (e: IllegalStateException){
+                                Log.d("Error", e.toString())
+                            }
                         }
                     }
                 }
                 else{
                     val fragmentA = firstFragment()
                     progressBar.visibility = View.GONE
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment, fragmentA).commit()
+                    try {
+                        supportFragmentManager.beginTransaction().replace(R.id.fragment, fragmentA).commit()
+                    }catch (e: IllegalStateException){
+                        Log.d("Error", e.toString())
+                    }
+
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
