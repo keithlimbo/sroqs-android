@@ -20,6 +20,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_first.*
 import kotlinx.android.synthetic.main.fragment_first.view.*
 
+
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -39,7 +40,7 @@ class firstFragment : Fragment() {
         super.onCreate(savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val builder = MaterialAlertDialogBuilder(activity!!,R.style.AlertDialogCustom)
+                val builder = MaterialAlertDialogBuilder(activity!!, R.style.AlertDialogCustom)
                 builder.setMessage("Do you want to log out?")
 
                 builder.setPositiveButton("Yes") { dialog, which ->
@@ -75,26 +76,28 @@ class firstFragment : Fragment() {
         communicator = activity as Communicator
 
         val user = Firebase.auth.currentUser
-
+        val bullet = Typography.bullet.toString()
         var enrollSelected = false
         var regSelected = false
         var gradesSelected = false
         var transcriptSelected = false
         val selectedArraylist = ArrayList<String>()
         var userEmail = user!!.email.toString()
-        userEmail = userEmail.replace("@gmail.com","")
-        userEmail = userEmail.replace("@yahoo.com","")
+        userEmail = userEmail.replace("@gmail.com", "")
+        userEmail = userEmail.replace("@yahoo.com", "")
         view.welcomeView.text = "Welcome, $userEmail"
 
         //Enroll
         view.btnenrollSubjects.setOnClickListener {
+            val requirements = "List of old grades from last semester"
+            val data = "Enrollment\n     $bullet $requirements\n"
             if (!enrollSelected) {
                 builder.setMessage("Are you sure you want to queue for enrollment?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
                         btnenrollSubjects.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#013766"))
                         enrollSelected = true
-                        selectedArraylist.add(Typography.bullet.toString() + " Enrollment")
+                        selectedArraylist.add(data)
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog
@@ -107,7 +110,7 @@ class firstFragment : Fragment() {
                     .setPositiveButton("Yes") { dialog, id ->
                         btnenrollSubjects.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C66005"))
                         enrollSelected = false
-                        selectedArraylist.removeAt(selectedArraylist.indexOf(Typography.bullet.toString() + " Enrollment"))
+                        selectedArraylist.removeAt(selectedArraylist.indexOf(data))
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog
@@ -118,13 +121,15 @@ class firstFragment : Fragment() {
         }
         //RegForm
         view.btnRegForm.setOnClickListener {
+            val requirements = "$bullet Print of Assessment Form\n     $bullet Valid ID/Student ID"
+            val data = "Registration Form\n     $requirements\n"
             if (!regSelected) {
                 builder.setMessage("Are you sure you want to queue for Registration form?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
                         btnRegForm.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#013766"))
                         regSelected = true
-                        selectedArraylist.add(Typography.bullet.toString() + " Registration Form")
+                        selectedArraylist.add(data)
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog
@@ -137,7 +142,7 @@ class firstFragment : Fragment() {
                     .setPositiveButton("Yes") { dialog, id ->
                         btnRegForm.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C66005"))
                         regSelected = false
-                        selectedArraylist.removeAt(selectedArraylist.indexOf(Typography.bullet.toString() + " Registration Form"))
+                        selectedArraylist.removeAt(selectedArraylist.indexOf(data))
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog
@@ -149,13 +154,15 @@ class firstFragment : Fragment() {
 
         //Grades
         view.btnCopyGrades.setOnClickListener {
+            val requirements = "$bullet Registration form of Last semester\n     $bullet Valid ID/Student ID"
+            val data = "Copy of Grades\n     $requirements\n"
             if (!gradesSelected) {
                 builder.setMessage("Are you sure you want to queue for Copy of your grades?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
                         btnCopyGrades.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#013766"))
                         gradesSelected = true
-                        selectedArraylist.add(Typography.bullet.toString() + " Copy of Grades")
+                        selectedArraylist.add(data)
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog
@@ -168,7 +175,7 @@ class firstFragment : Fragment() {
                     .setPositiveButton("Yes") { dialog, id ->
                         btnCopyGrades.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C66005"))
                         gradesSelected = false
-                        selectedArraylist.removeAt(selectedArraylist.indexOf(Typography.bullet.toString() + " Copy of Grades"))
+                        selectedArraylist.removeAt(selectedArraylist.indexOf(data))
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog
@@ -180,13 +187,15 @@ class firstFragment : Fragment() {
 
         //Transcript
         view.btnTranscript.setOnClickListener {
+            val requirements = "$bullet Official Receipt (OR)\n     $bullet Valid ID/Student ID\n     $bullet Documentary Stamps"
+            val data = "Transcript\n     $requirements\n"
             if (!transcriptSelected) {
                 builder.setMessage("Are you sure you want to queue for Transcript?")
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
                         btnTranscript.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#013766"))
                         transcriptSelected = true
-                        selectedArraylist.add(Typography.bullet.toString() + " Transcript")
+                        selectedArraylist.add(data)
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog
@@ -199,7 +208,7 @@ class firstFragment : Fragment() {
                     .setPositiveButton("Yes") { dialog, id ->
                         btnTranscript.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C66005"))
                         transcriptSelected = false
-                        selectedArraylist.removeAt(selectedArraylist.indexOf(Typography.bullet.toString() + " Transcript"))
+                        selectedArraylist.removeAt(selectedArraylist.indexOf(data))
                     }
                     .setNegativeButton("No") { dialog, id ->
                         // Dismiss the dialog
