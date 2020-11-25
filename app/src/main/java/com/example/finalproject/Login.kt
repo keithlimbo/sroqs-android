@@ -4,6 +4,9 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import java.time.LocalTime
+import kotlin.properties.Delegates
 
 class Login : AppCompatActivity() {
 
@@ -27,7 +32,7 @@ class Login : AppCompatActivity() {
 
         //Set Notif channel
         createnotifChennel()
-
+        startNetworkCallback()
         // [START initialize_auth]
         // Initialize Firebase Auth
         auth = Firebase.auth
@@ -37,19 +42,22 @@ class Login : AppCompatActivity() {
         val getPassword = findViewById<EditText>(R.id.login_password)
         val btnLogin = findViewById<Button>(R.id.login_btn)
 
-        if(auth.currentUser != null){
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }else {
-            btnLogin.setOnClickListener {
-                val email = getUsername.text.toString()
-                val pass = getPassword.text.toString()
+        val localtime = LocalTime.now().hour
 
-                if (getUsername.text.trim().length < 6 || getPassword.text.trim().length < 6) {
-                    getUsername.error = "Please input a valid Email"
-                    getPassword.error = "Please input a valid password"
-                } else {
-                    auth.signInWithEmailAndPassword(email, pass)
+        if(localtime in 8..15) {
+            if (auth.currentUser != null) {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            } else {
+                btnLogin.setOnClickListener {
+                    val email = getUsername.text.toString()
+                    val pass = getPassword.text.toString()
+
+                    if (getUsername.text.trim().length < 6 || getPassword.text.trim().length < 6) {
+                        getUsername.error = "Please input a valid Email"
+                        getPassword.error = "Please input a valid password"
+                    } else {
+                        auth.signInWithEmailAndPassword(email, pass)
                             .addOnCompleteListener(this) { task ->
                                 if (task.isSuccessful) {
                                     // Sign in success, update UI with the signed-in user's information
@@ -62,13 +70,59 @@ class Login : AppCompatActivity() {
                                     // If sign in fails, display a message to the user.
                                     Log.w("TAG", "signInWithEmail:failure", task.exception)
                                     Toast.makeText(this, "Login Fail", Toast.LENGTH_SHORT).show()
+
                                 }
                             }
+                    }
                 }
+            }
+        }
+        else{
+            Toast.makeText(this, "Queue is Closed for now", Toast.LENGTH_SHORT).show()
+            if (Build.VERSION.SDK_INT >= 21) {
+                // If yes, run the fancy new function to end the app and
+                //  remove it from the task list.
+                finishAndRemoveTask()
+            } else {
+                // If not, then just end the app without removing it from
+                //  the task list.
+                finish()
             }
         }
     }
 
+    object Variables {
+        var isNetworkConnected: Boolean by Delegates.observable(false) { property, oldValue, newValue ->
+            Log.i("Network connectivity", "$newValue")
+        }
+    }
+
+    private fun startNetworkCallback() {
+        val cm: ConnectivityManager = application.getSystemService(Context.CONNECTIVITY_SERVICE)    as ConnectivityManager
+        val builder: NetworkRequest.Builder = NetworkRequest.Builder()
+        cm.registerNetworkCallback(
+            builder.build(),
+            object : ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(network: Network) {
+                    Variables.isNetworkConnected = true
+                }
+
+                override fun onLost(network: Network) {
+                    Variables.isNetworkConnected = false
+                    Toast.makeText(this@Login, "Connection Lost", Toast.LENGTH_SHORT).show()
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        // If yes, run the fancy new function to end the app and
+                        //  remove it from the task list.
+                        finishAndRemoveTask()
+                    } else {
+                        // If not, then just end the app without removing it from
+                        //  the task list.
+                        finish()
+                    }
+                }
+
+            })
+    }
     private fun createnotifChennel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -85,6 +139,4 @@ class Login : AppCompatActivity() {
             notificationManager.createNotificationChannel(channel)
         }
     }
-
-
 }
