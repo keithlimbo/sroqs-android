@@ -18,7 +18,12 @@
                 android:layout_marginRight="40dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-        >
+                android:layout_margin="30dp">
+            <ImageView
+                    android:src="@drawable/flat"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp" android:id="@+id/imageView3" android:layout_gravity="center"
+                    android:background="@drawable/backlogo" android:padding="10dp"/>
             <TextView
                     android:text="What College are you in?"
                     android:layout_marginRight="40dp"
@@ -29,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/textView"
                     android:textSize="20sp" android:fontFamily="@font/nunitoreg" android:textColor="#2E2A2A"
-                    android:textAllCaps="true" android:layout_marginTop="65dp"/>
+                    android:textAllCaps="true" android:layout_marginTop="35dp"/>
             <Spinner
                     android:layout_marginRight="45dp"
                     android:layout_marginLeft="45dp"
@@ -49,7 +54,7 @@
                     android:fontFamily="@font/nunitosemibold" android:textAllCaps="true"
                     android:gravity="center"/>
             <TextView
-                    android:text="Selected Transactions"
+                    android:text="Requirements"
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginBottom="50dp"
