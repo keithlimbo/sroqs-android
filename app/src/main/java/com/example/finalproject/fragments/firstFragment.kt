@@ -85,7 +85,7 @@ class firstFragment : Fragment() {
         var userEmail = user!!.email.toString()
         userEmail = userEmail.replace("@gmail.com", "")
         userEmail = userEmail.replace("@yahoo.com", "")
-        view.welcomeView.text = "Welcome, $userEmail"
+        view.welcomeView.text = "$userEmail"
 
         //Enroll
         view.btnenrollSubjects.setOnClickListener {

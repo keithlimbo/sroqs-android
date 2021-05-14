@@ -7,89 +7,105 @@
                                                    tools:context=".fragments.firstFragment"
                                                    android:id="@+id/ConstraintLayout" android:visibility="visible"
                                                    android:background="@color/background">
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="350dp"
-            android:layout_height="600dp" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:background="#D65C5C">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="38dp" android:layout_marginStart="38dp" android:layout_marginRight="38dp"
+                android:layout_marginEnd="38dp" android:layout_marginTop="40dp">
+            <ImageView
+                    android:src="@drawable/outline_account_circle_24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/imageView5" android:layout_gravity="center"/>
             <TextView
-                    android:text="Welcome, User!"
+                    android:text="username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:id="@+id/welcomeView"
-                    android:textSize="24sp"
+                    android:textSize="28sp"
                     android:fontFamily="@font/nunitosemibold"
                     android:textColor="#292727" android:layout_marginLeft="15dp" android:layout_marginRight="15dp"
-                    android:textAllCaps="true"/>
+                    android:textAllCaps="true" android:gravity="center"/>
+            <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"
+            />
+            <TextView
+                    android:text="Welcome to S.R.O.Q.S.!"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/textView6" android:gravity="center"
+                    android:fontFamily="@font/nunitosemibold" android:textColor="#2E2A2A" android:textSize="24sp"
+                    android:layout_marginTop="25dp" android:textAllCaps="true"/>
+            <TextView
+                    android:text="What would you like to queue for today?"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView2"
+                    android:layout_marginBottom="50dp"
+                    android:textSize="18sp" android:fontFamily="@font/nunitoreg"
+                    android:textColor="#2E2A2A" android:layout_marginRight="15dp" android:textAllCaps="false"
+                    android:layout_marginTop="10dp" android:gravity="center"/>
+            <Button
+                    android:text="Transcript of Records"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:id="@+id/btnTranscript"
+                    tools:layout_editor_absoluteY="627dp" tools:layout_editor_absoluteX="243dp"
+                    android:gravity="center|left" android:layout_marginLeft="40dp" android:layout_marginRight="40dp"
+                    android:fontFamily="@font/nunitoreg" android:layout_marginBottom="10dp"
+                    app:backgroundTint="@color/choiceBtn" style="@style/Widget.MaterialComponents.Button.Icon"
+                    app:icon="@drawable/ic_transcript" app:iconPadding="18dp" android:textSize="14sp"/>
+            <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:id="@+id/btnenrollSubjects" android:text="Enrollment of old students"
+                    tools:layout_editor_absoluteY="581dp"
+                    tools:layout_editor_absoluteX="63dp"
+                    android:gravity="center|left" android:layout_marginLeft="40dp" android:layout_marginRight="40dp"
+                    android:fontFamily="@font/nunitoreg" android:layout_marginBottom="10dp"
+                    app:backgroundTint="@color/choiceBtn"
+                    style="@style/Widget.MaterialComponents.Button.Icon" app:icon="@drawable/ic_enrollment"
+                    app:iconPadding="18dp" android:textSize="14sp"/>
+            <Button
+                    android:text="Registration Form"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:id="@+id/btnRegForm"
+                    tools:layout_editor_absoluteY="515dp" tools:layout_editor_absoluteX="242dp"
+                    android:gravity="center|left"
+                    android:layout_marginLeft="40dp" android:layout_marginRight="40dp"
+                    android:fontFamily="@font/nunitoreg" android:layout_marginBottom="10dp"
+                    app:backgroundTint="@color/choiceBtn"
+                    style="@style/Widget.MaterialComponents.Button.Icon" app:icon="@drawable/ic_regform"
+                    app:iconPadding="18dp" android:textSize="14sp"/>
+            <Button
+                    android:text="Copy of Grades"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:id="@+id/btnCopyGrades"
+                    tools:layout_editor_absoluteY="646dp" tools:layout_editor_absoluteX="81dp"
+                    android:gravity="center|left" android:layout_marginLeft="40dp" android:layout_marginRight="40dp"
+                    android:fontFamily="@font/nunitoreg" android:layout_marginBottom="40dp"
+                    app:backgroundTint="@color/choiceBtn"
+                    style="@style/Widget.MaterialComponents.Button.Icon" app:icon="@drawable/ic_report"
+                    app:iconPadding="18dp" android:textSize="14sp"/>
+            <Button
+                    android:layout_marginLeft="90dp"
+                    android:layout_marginRight="90dp"
+                    android:text="Queue up!"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:id="@+id/btnQueue"
+                    android:fontFamily="@font/nunitolight" app:backgroundTint="@color/colorAccent"
+                    android:textSize="14sp" android:layout_marginBottom="50dp"/>
         </LinearLayout>
-        <TextView
-                android:text="What would you like to queue for today?"
-                android:layout_marginLeft="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView2"
-                android:layout_marginBottom="50dp"
-                android:textSize="22sp" android:fontFamily="@font/nunitoreg"
-                android:textColor="#2E2A2A" android:layout_marginRight="15dp" android:textAllCaps="true"
-                android:layout_marginTop="10dp"/>
-        <Button
-                android:text="Transcript of Records"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:id="@+id/btnTranscript"
-                tools:layout_editor_absoluteY="627dp" tools:layout_editor_absoluteX="243dp"
-                android:gravity="center|left" android:layout_marginLeft="40dp" android:layout_marginRight="40dp"
-                android:fontFamily="@font/nunitoreg" android:layout_marginBottom="10dp"
-                app:backgroundTint="@color/choiceBtn" style="@style/Widget.MaterialComponents.Button.Icon"
-                app:icon="@drawable/ic_transcript" app:iconPadding="18dp" android:textSize="14sp"/>
-        <Button
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:id="@+id/btnenrollSubjects" android:text="Enrollment of old students"
-                tools:layout_editor_absoluteY="581dp"
-                tools:layout_editor_absoluteX="63dp"
-                android:gravity="center|left" android:layout_marginLeft="40dp" android:layout_marginRight="40dp"
-                android:fontFamily="@font/nunitoreg" android:layout_marginBottom="10dp"
-                app:backgroundTint="@color/choiceBtn"
-                style="@style/Widget.MaterialComponents.Button.Icon" app:icon="@drawable/ic_enrollment"
-                app:iconPadding="18dp" android:textSize="14sp"/>
-        <Button
-                android:text="Registration Form"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:id="@+id/btnRegForm"
-                tools:layout_editor_absoluteY="515dp" tools:layout_editor_absoluteX="242dp"
-                android:gravity="center|left"
-                android:layout_marginLeft="40dp" android:layout_marginRight="40dp"
-                android:fontFamily="@font/nunitoreg" android:layout_marginBottom="10dp"
-                app:backgroundTint="@color/choiceBtn"
-                style="@style/Widget.MaterialComponents.Button.Icon" app:icon="@drawable/ic_regform"
-                app:iconPadding="18dp" android:textSize="14sp"/>
-        <Button
-                android:text="Copy of Grades"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:id="@+id/btnCopyGrades"
-                tools:layout_editor_absoluteY="646dp" tools:layout_editor_absoluteX="81dp"
-                android:gravity="center|left" android:layout_marginLeft="40dp" android:layout_marginRight="40dp"
-                android:fontFamily="@font/nunitoreg" android:layout_marginBottom="40dp"
-                app:backgroundTint="@color/choiceBtn"
-                style="@style/Widget.MaterialComponents.Button.Icon" app:icon="@drawable/ic_report"
-                app:iconPadding="18dp" android:textSize="14sp"/>
-        <Button
-                android:layout_marginLeft="90dp"
-                android:layout_marginRight="90dp"
-                android:text="Queue up!"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:id="@+id/btnQueue"
-                android:fontFamily="@font/nunitolight" app:backgroundTint="@color/colorAccent" android:textSize="14sp"/>
-    </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
